@@ -21,5 +21,9 @@ public class TransporteCargaInanimada extends Transporte {
         }
         return (custoDrone * getDistancia()) + acrescimos;
     }
+
+    public String toString(){
+        return "Número: "+getNumero()+", Nome Cliente: "+getNomeCliente()+", Descrição: "+getDescricao()+", Peso: "+getPeso()+", Latitude de Origem: "+getLatitudeOrigem()+"º, Latitude de Destino: "+getLatitudeDestino()+"º, Longitude de Origem: "+getLongitudeOrigem()+"º, Longitude de Destino: "+getLongitudeDestino()+"º, Situação: "+getSituacao()+", Distância: "+getDistancia()+" km, Carga Perigosa: "+this.cargaPerigosa+"\n";
+    }
 }
 

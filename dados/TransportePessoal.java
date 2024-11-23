@@ -18,5 +18,9 @@ public class TransportePessoal extends Transporte {
         double acrescimos = qtdPessoas * 10;
         return (custoDrone * getDistancia()) + acrescimos;
     }
+
+    public String toString(){
+        return "Número: "+getNumero()+", Nome Cliente: "+getNomeCliente()+", Descrição: "+getDescricao()+", Peso: "+getPeso()+", Latitude de Origem: "+getLatitudeOrigem()+"º, Latitude de Destino: "+getLatitudeDestino()+"º, Longitude de Origem: "+getLongitudeOrigem()+"º, Longitude de Destino: "+getLongitudeDestino()+"º, Situação: "+getSituacao()+", Distância: "+getDistancia()+" km, Quantidade de pessoas: "+this.qtdPessoas+"\n";
+    }
 }
 
