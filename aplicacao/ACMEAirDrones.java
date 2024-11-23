@@ -19,7 +19,7 @@ public class ACMEAirDrones {
 
     private JFrame frame;
     private JPanel panel;
-    private Queue<String> transportesPendentes = new LinkedList<>();
+    private Queue<Transporte> transportesPendentes = new LinkedList<>();
     private HashMap<String, String> dronesCadastrados = new HashMap<>();
 
     public ACMEAirDrones() {

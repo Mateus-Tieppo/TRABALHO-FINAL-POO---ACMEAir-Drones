@@ -12,7 +12,7 @@ public abstract class Transporte {
     private Estado situacao;
     private double distancia;
 
-    public Transporte(int numero, String nomeCliente, String descricao, double peso, double latitudeOrigem, double latitudeDestino, double longitudeOrigem, double longitudeDestino, Estado situacao) {
+    public Transporte(int numero, String nomeCliente, String descricao, double peso, double latitudeOrigem, double latitudeDestino, double longitudeOrigem, double longitudeDestino) {
         this.numero = numero;
         this.nomeCliente = nomeCliente;
         this.descricao = descricao;
@@ -21,7 +21,7 @@ public abstract class Transporte {
         this.latitudeDestino = latitudeDestino;
         this.longitudeOrigem = longitudeOrigem;
         this.longitudeDestino = longitudeDestino;
-        this.situacao = situacao;
+        this.situacao = Estado.PENDENTE;
         this.distancia = calcularDistancia();
     }
 
