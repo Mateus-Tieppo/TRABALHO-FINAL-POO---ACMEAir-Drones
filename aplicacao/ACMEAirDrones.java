@@ -942,7 +942,16 @@ public class ACMEAirDrones {
         relatorioArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // Borda leve
         relatorioArea.setFont(new Font("Arial", Font.PLAIN, 21)); // Fonte do texto
         mostrarRelatorioGeralFrame.add(new JScrollPane(relatorioArea), BorderLayout.CENTER); // Envolvendo o JTextArea em um JScrollPane para permitir rolagem
-    
+   
+        // Relatorio Geral
+        StringBuilder relatorioGeral = new StringBuilder();
+        dronesCadastrados.forEach((chave, valor) -> {
+            relatorioGeral.append("Chave: ").append(chave).append(" - Valor: ").append(valor).append("\n");
+        });
+        /* Esperando ArrayList de transportes do Fred */
+
+        relatorioArea.setText(relatorioGeral.toString());
+
         // Painel de botões
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBorder(BorderFactory.createCompoundBorder(
