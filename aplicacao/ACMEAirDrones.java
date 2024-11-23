@@ -1,10 +1,12 @@
 package aplicacao;
 
+import dados.Estado;
 import dados.Transporte;
 import dados.TransporteCargaInanimada;
 import dados.TransporteCargaViva;
 import dados.TransportePessoal;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -14,10 +16,16 @@ import javax.swing.border.LineBorder;
 
     public class ACMEAirDrones {
 
+    public interface CarregarTransporte {
+        void carregarTransporte(Transporte transporte);        
+    }
+
     private JFrame frame;
     private JPanel panel;
     private Queue<Transporte> transportesPendentes = new LinkedList<>();
     private HashMap<String, String> dronesCadastrados = new HashMap<>();
+    private ArrayList<Transporte> transportes = new ArrayList<>();
+    private Transporte transporteCarregado;
 
     public ACMEAirDrones() {
         frame = new JFrame("ACME Air Drones - Sistema de Gerenciamento");
@@ -78,7 +86,7 @@ import javax.swing.border.LineBorder;
 
         // Adicionar ações aos botões
         cadastrarDroneButton.addActionListener(e -> abrirTelaCadastroDrone());
-        cadastrarTransporteButton.addActionListener(e -> cadastrarTransporte(null));
+        cadastrarTransporteButton.addActionListener(e -> telaCadastroTransporte());
         processarTransportesButton.addActionListener(e -> processarTransportesPendentes());
         relatorioGeralButton.addActionListener(e -> mostrarRelatorioGeral());
         mostrarTransportesButton.addActionListener(e -> mostrarTransportes());
@@ -674,6 +682,7 @@ public void cadastrarTransporte(String tipoTransporte) {
                     TransportePessoal tp = new TransportePessoal(numero, nomeClienteField.getText().trim(), descricaoField.getText().trim(),
                             peso, latOrigem, latDestino, longOrigem, longDestino, qtdPessoas);
                     transportesPendentes.add(tp);
+                    transportes.add(tp);
                     areaMensagens.setText("Transporte pessoal cadastrado com sucesso.\n");
                 });
 
@@ -761,6 +770,7 @@ public void cadastrarTransporte(String tipoTransporte) {
                     TransporteCargaViva tc = new TransporteCargaViva(numero, nomeClienteField.getText().trim(), descricaoField.getText().trim(),
                             peso, latOrigem, latDestino, longOrigem, longDestino, tempMinima, tempMaxima);
                     transportesPendentes.add(tc);
+                    transportes.add(tc);
                     areaMensagens.setText("Transporte de carga viva cadastrado com sucesso.\n");
                 });
 
@@ -841,6 +851,7 @@ public void cadastrarTransporte(String tipoTransporte) {
                     TransporteCargaInanimada tci = new TransporteCargaInanimada(numero, nomeClienteField.getText().trim(), descricaoField.getText().trim(),
                             peso, latOrigem, latDestino, longOrigem, longDestino, cargaPerigosa);
                     transportesPendentes.add(tci);
+                    transportes.add(tci);
                     areaMensagens.setText("Transporte de carga inanimada cadastrado com sucesso.\n");
                 });
             }
@@ -1040,6 +1051,13 @@ public void cadastrarTransporte(String tipoTransporte) {
         mostrarTransportesFrame.setVisible(true);
     }
 
+    CarregarTransporte ct = new CarregarTransporte() {
+        @Override
+        public void carregarTransporte(Transporte transporte){
+            transporteCarregado = transporte;
+        }
+    };
+
     public void alterarSituacaoTransporte() {
         // Criando a janela para alterar a situação do transporte
         JFrame alterarSituacaoButton = new JFrame("Alterar Situação do Transporte");
@@ -1072,7 +1090,7 @@ public void cadastrarTransporte(String tipoTransporte) {
         centralPanel.add(new JScrollPane(transporteInfoArea));
     
         // ComboBox para selecionar a nova situação
-        String[] situacoes = {"PENDENTE", "ALOCADO", "EM_TRANSITO", "ENTREGUE", "TERMINADO", "CANCELADO"};
+        String[] situacoes = {"PENDENTE", "ALOCADO", "TERMINADO", "CANCELADO"};
         JComboBox<String> situacaoComboBox = new JComboBox<>(situacoes);
         centralPanel.add(new JLabel("Nova Situação:"));
         centralPanel.add(situacaoComboBox);
@@ -1103,14 +1121,59 @@ public void cadastrarTransporte(String tipoTransporte) {
     
         alterarSituacaoButton.add(centralPanel, BorderLayout.CENTER);
     
-        // Ação do botão "Buscar" - busca o transporte pelo número
         buscarButton.addActionListener(e -> {
+            Transporte tr = null;
+
+            try {
+                tr = transportes.get(0);
+            } catch (IndexOutOfBoundsException ex) {
+                transporteInfoArea.setText("Erro: Nenhum transporte disponível.");
+                return;
+            }
+
+            int numero;
             String numeroStr = numeroTextField.getText().trim();
+
+            try {
+                numero = Integer.parseInt(numeroStr);
+            } catch (NumberFormatException ex){
+                transporteInfoArea.setText("Erro: O número do transporte deve ser um número válido.\n");
+                return;
+            }
+
             if (numeroStr.isEmpty()) {
                 JOptionPane.showMessageDialog(alterarSituacaoButton, "Por favor, insira o número do transporte.", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+
+            for (Transporte t : transportes){
+                if (t.getNumero() == numero){
+                    tr = t;
+                    transporteInfoArea.setText(t.toString());
+                }
+            }
+
+            if (tr == null){
+                transporteInfoArea.setText("Erro: Não existe um transporte com esse número.");
+            }
+
+            ct.carregarTransporte(tr);
         });
+
+        alterarButton.addActionListener(a -> {
+            String situacaoSelecionada = (String) situacaoComboBox.getSelectedItem();
+            Estado situacao = Estado.valueOf(situacaoSelecionada);
+
+            if (situacao == transporteCarregado.getSituacao()){
+                transporteInfoArea.setText("Erro: A nova situação deve ser DIFERENTE da situação atual.");
+            } else {
+                transporteCarregado.setSituacao(situacao);
+                transporteInfoArea.setText("Situação alterada com sucesso!");
+            }
+
+        });
+
+        cancelarButton.addActionListener(e -> {alterarSituacaoButton.dispose();});
 
         alterarSituacaoButton.setVisible(true);
     }  

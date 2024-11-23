@@ -61,6 +61,10 @@ public abstract class Transporte {
         return this.situacao;
     }
 
+    public void setSituacao(Estado situacao){
+        this.situacao = situacao;
+    }
+
     public double getDistancia() {
         return this.distancia;
     }
