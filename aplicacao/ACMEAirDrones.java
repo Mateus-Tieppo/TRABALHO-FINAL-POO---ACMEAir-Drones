@@ -1,21 +1,18 @@
 package aplicacao;
 
+import dados.Transporte;
+import dados.TransporteCargaInanimada;
+import dados.TransporteCargaViva;
+import dados.TransportePessoal;
 import java.awt.*;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
-import dados.Drone;
-import dados.Estado;
-import dados.Transporte;
-import dados.TransporteCargaInanimada;
-import dados.TransporteCargaViva;
-import dados.TransportePessoal;
 
-public class ACMEAirDrones {
+    public class ACMEAirDrones {
 
     private JFrame frame;
     private JPanel panel;
@@ -81,7 +78,7 @@ public class ACMEAirDrones {
 
         // Adicionar ações aos botões
         cadastrarDroneButton.addActionListener(e -> abrirTelaCadastroDrone());
-        cadastrarTransporteButton.addActionListener(e -> telaCadastroTransporte());
+        cadastrarTransporteButton.addActionListener(e -> cadastrarTransporte(null));
         processarTransportesButton.addActionListener(e -> processarTransportesPendentes());
         relatorioGeralButton.addActionListener(e -> mostrarRelatorioGeral());
         mostrarTransportesButton.addActionListener(e -> mostrarTransportes());
@@ -341,38 +338,53 @@ public class ACMEAirDrones {
     
         salvarButton.addActionListener(e -> {
             try {
+                
                 String codigo = codigoField.getText().trim();
                 String nome = nomeField.getText().trim();
                 String autonomia = autonomiaField.getText().trim();
                 String capacidade = capacidadeField != null ? capacidadeField.getText().trim() : null;
-        
+                
+                
                 if (codigo.isEmpty() || nome.isEmpty() || autonomia.isEmpty() || (capacidadeField != null && capacidade.isEmpty())) {
                     mensagemArea.setText("Erro: Todos os campos são obrigatórios.\n");
                     return;
                 }
         
+            
                 if (dronesCadastrados.containsKey(codigo)) {
                     mensagemArea.setText("Erro: Já existe um drone com o código " + codigo + ".\n");
-                } else {
-                    try {
-                        Double autonomiaNumerica = Double.parseDouble("texto_invalido"); 
-                        if (capacidadeField != null) {
-                            Double capacidadeNumerica = Double.parseDouble(capacidade);
-                        }
-                    } catch (NumberFormatException ex) {
-                        mensagemArea.setText("Erro: Autonomia e Código devem ser valores numéricos.\n");
-                        return;
-                    }
-        
-                    String detalhes = "Nome: " + nome + ", Autonomia: " + autonomia;
-                    if (capacidadeField != null) {
-                        detalhes += ", Capacidade: " + capacidade;
-                    }
-                    dronesCadastrados.put(codigo, tipo + " - " + detalhes);
-                    mensagemArea.setText("Drone " + tipo.toLowerCase() + " cadastrado com sucesso!\n");
+                    return;
                 }
+        
+                
+                Double autonomiaNumerica = null;
+                Double capacidadeNumerica = null;
+        
+                try {
+                    autonomiaNumerica = Double.parseDouble(autonomia);
+                    if (capacidadeField != null && !capacidade.isEmpty()) {
+                        capacidadeNumerica = Double.parseDouble(capacidade);
+                    }
+                } catch (NumberFormatException ex) {
+                    mensagemArea.setText("Erro: Autonomia e Capacidade devem ser valores numéricos válidos.\n");
+                    return;
+                }
+        
+                
+                String detalhes = "Nome: " + nome + ", Autonomia: " + autonomia;
+                if (capacidadeField != null && capacidadeNumerica != null) {
+                    detalhes += ", Capacidade: " + capacidadeNumerica;
+                }
+        
+                
+                dronesCadastrados.put(codigo, tipo + " - " + detalhes);
+        
+                
+                mensagemArea.setText("Drone " + tipo.toLowerCase() + " cadastrado com sucesso!\n");
             } catch (Exception ex) {
+                
                 mensagemArea.setText("Erro inesperado ao salvar o drone: " + ex.getMessage() + "\n");
+                ex.printStackTrace(); 
             }
         });        
         
@@ -418,7 +430,7 @@ public class ACMEAirDrones {
         });
     
         cadastroFrame.setVisible(true);
-    }    
+    }  
     
     private void telaCadastroTransporte() {
         JFrame tipoTransporte = new JFrame("Tipo de Transporte");
@@ -453,7 +465,7 @@ public class ACMEAirDrones {
         }
     }
 
-    public void cadastrarTransporte(String tipoTransporte) {
+public void cadastrarTransporte(String tipoTransporte) {
         JFrame novoTransporte = new JFrame("Cadastrar Novo Transporte");
         novoTransporte.setSize(800, 600);
         novoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
