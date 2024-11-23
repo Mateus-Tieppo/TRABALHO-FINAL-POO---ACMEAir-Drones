@@ -958,7 +958,7 @@ public void cadastrarTransporte(String tipoTransporte) {
         // Relatorio Geral
         StringBuilder relatorioGeral = new StringBuilder();
         dronesCadastrados.forEach((chave, valor) -> {
-            relatorioGeral.append("Chave: ").append(chave).append(" - Valor: ").append(valor).append("\n");
+            relatorioGeral.append(chave).append(" - Tipo: ").append(valor).append("\n");
         });
         /* Esperando ArrayList de transportes do Fred */
 
