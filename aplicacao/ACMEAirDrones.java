@@ -56,56 +56,56 @@ public class ACMEAirDrones {
         tituloContainer.add(tituloPanel);
     
         // Criação dos botões
-JButton cadastrarDroneButton = new JButton("Cadastrar Novo Drone");
-JButton cadastrarTransporteButton = new JButton("Cadastrar Novo Transporte");
-JButton processarTransportesButton = new JButton("Processar Transportes Pendentes");
-JButton relatorioGeralButton = new JButton("Mostrar Relatório Geral");
-JButton mostrarTransportesButton = new JButton("Mostrar Todos os Transportes");
-JButton alterarSituacaoButton = new JButton("Alterar Situação de Transporte");
-JButton lerDadosButton = new JButton("Ler Dados de Simulação");
-JButton salvarDadosButton = new JButton("Salvar Dados");
-JButton carregarDadosButton = new JButton("Carregar Dados");
-JButton finalizarButton = new JButton("Finalizar Sistema");
+        JButton cadastrarDroneButton = new JButton("Cadastrar Novo Drone");
+        JButton cadastrarTransporteButton = new JButton("Cadastrar Novo Transporte");
+        JButton processarTransportesButton = new JButton("Processar Transportes Pendentes");
+        JButton relatorioGeralButton = new JButton("Mostrar Relatório Geral");
+        JButton mostrarTransportesButton = new JButton("Mostrar Todos os Transportes");
+        JButton alterarSituacaoButton = new JButton("Alterar Situação de Transporte");
+        JButton lerDadosButton = new JButton("Ler Dados de Simulação");
+        JButton salvarDadosButton = new JButton("Salvar Dados");
+        JButton carregarDadosButton = new JButton("Carregar Dados");
+        JButton finalizarButton = new JButton("Finalizar Sistema");
 
-// Personalizando os botões com o método 'customizeButton'
-customizeButton(cadastrarDroneButton);
-customizeButton(cadastrarTransporteButton);
-customizeButton(processarTransportesButton);
-customizeButton(relatorioGeralButton);
-customizeButton(mostrarTransportesButton);
-customizeButton(alterarSituacaoButton);
-customizeButton(lerDadosButton);
-customizeButton(salvarDadosButton);
-customizeButton(carregarDadosButton);
-customizeButton(finalizarButton);
+        // Personalizando os botões com o método 'customizeButton'
+        customizeButton(cadastrarDroneButton);
+        customizeButton(cadastrarTransporteButton);
+        customizeButton(processarTransportesButton);
+        customizeButton(relatorioGeralButton);
+        customizeButton(mostrarTransportesButton);
+        customizeButton(alterarSituacaoButton);
+        customizeButton(lerDadosButton);
+        customizeButton(salvarDadosButton);
+        customizeButton(carregarDadosButton);
+        customizeButton(finalizarButton);
 
-// Adicionar ações aos botões
-cadastrarDroneButton.addActionListener(e -> abrirTelaCadastroDrone());
-cadastrarTransporteButton.addActionListener(e -> cadastrarTransporte(null));
-processarTransportesButton.addActionListener(e -> processarTransportesPendentes());
-relatorioGeralButton.addActionListener(e -> mostrarRelatorioGeral());
-mostrarTransportesButton.addActionListener(e -> mostrarTransportes());
-alterarSituacaoButton.addActionListener(e -> alterarSituacaoTransporte());
-lerDadosButton.addActionListener(e -> lerDadosSimulacao());
-salvarDadosButton.addActionListener(e -> salvarDados());
-carregarDadosButton.addActionListener(e -> carregarDados());
-finalizarButton.addActionListener(e -> finalizarSistema());
+        // Adicionar ações aos botões
+        cadastrarDroneButton.addActionListener(e -> abrirTelaCadastroDrone());
+        cadastrarTransporteButton.addActionListener(e -> telaCadastroTransporte());
+        processarTransportesButton.addActionListener(e -> processarTransportesPendentes());
+        relatorioGeralButton.addActionListener(e -> mostrarRelatorioGeral());
+        mostrarTransportesButton.addActionListener(e -> mostrarTransportes());
+        alterarSituacaoButton.addActionListener(e -> alterarSituacaoTransporte());
+        lerDadosButton.addActionListener(e -> lerDadosSimulacao());
+        salvarDadosButton.addActionListener(e -> salvarDados());
+        carregarDadosButton.addActionListener(e -> carregarDados());
+        finalizarButton.addActionListener(e -> finalizarSistema());
 
-// Criar o painel para adicionar os botões
-JPanel panel = new JPanel();
-panel.setLayout(new GridLayout(5, 2, 10, 10)); // Layout com 5 linhas e 2 colunas, espaçamento de 10px entre os botões
+        // Criar o painel para adicionar os botões
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(5, 2, 10, 10)); // Layout com 5 linhas e 2 colunas, espaçamento de 10px entre os botões
 
-// Adicionar os botões ao painel
-panel.add(cadastrarDroneButton);
-panel.add(cadastrarTransporteButton);
-panel.add(processarTransportesButton);
-panel.add(relatorioGeralButton);
-panel.add(mostrarTransportesButton);
-panel.add(alterarSituacaoButton);
-panel.add(lerDadosButton);
-panel.add(salvarDadosButton);
-panel.add(carregarDadosButton);
-panel.add(finalizarButton);
+        // Adicionar os botões ao painel
+        panel.add(cadastrarDroneButton);
+        panel.add(cadastrarTransporteButton);
+        panel.add(processarTransportesButton);
+        panel.add(relatorioGeralButton);
+        panel.add(mostrarTransportesButton);
+        panel.add(alterarSituacaoButton);
+        panel.add(lerDadosButton);
+        panel.add(salvarDadosButton);
+        panel.add(carregarDadosButton);
+        panel.add(finalizarButton);
     
         
         frame.add(tituloContainer, BorderLayout.NORTH);
@@ -443,7 +443,7 @@ panel.add(finalizarButton);
         tipoTransporte.setVisible(true);
     }
 
-private boolean parseBooleanSafe(String input){
+    private boolean parseBooleanSafe(String input){
         if ("true".equalsIgnoreCase(input)) {
             return true;
         } else if ("false".equalsIgnoreCase(input)) {
@@ -453,7 +453,7 @@ private boolean parseBooleanSafe(String input){
         }
     }
 
-public void cadastrarTransporte(String tipoTransporte) {
+    public void cadastrarTransporte(String tipoTransporte) {
         JFrame novoTransporte = new JFrame("Cadastrar Novo Transporte");
         novoTransporte.setSize(800, 600);
         novoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
