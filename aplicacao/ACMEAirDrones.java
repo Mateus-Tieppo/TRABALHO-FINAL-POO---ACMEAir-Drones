@@ -14,7 +14,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 
-    public class ACMEAirDrones {
+public class ACMEAirDrones {
 
     public interface CarregarTransporte {
         void carregarTransporte(Transporte transporte);        
@@ -473,7 +473,7 @@ import javax.swing.border.LineBorder;
         }
     }
 
-public void cadastrarTransporte(String tipoTransporte) {
+    public void cadastrarTransporte(String tipoTransporte) {
         JFrame novoTransporte = new JFrame("Cadastrar Novo Transporte");
         novoTransporte.setSize(800, 600);
         novoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -899,47 +899,47 @@ public void cadastrarTransporte(String tipoTransporte) {
         tituloProcessarTransportesPendentes.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
         processarTransportesPendentes.add(tituloProcessarTransportesPendentes, BorderLayout.NORTH);
 
-    JTextArea mensagemArea = new JTextArea(30, 60);
-    mensagemArea.setEditable(false);
-    mensagemArea.setWrapStyleWord(true);
-    mensagemArea.setLineWrap(true);
-    mensagemArea.setBackground(new Color(255, 250, 240));
-    mensagemArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-    mensagemArea.setFont(new Font("Arial", Font.PLAIN, 21));
-    processarTransportesPendentes.add(new JScrollPane(mensagemArea), BorderLayout.CENTER);
+        JTextArea mensagemArea = new JTextArea(30, 60);
+        mensagemArea.setEditable(false);
+        mensagemArea.setWrapStyleWord(true);
+        mensagemArea.setLineWrap(true);
+        mensagemArea.setBackground(new Color(255, 250, 240));
+        mensagemArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        mensagemArea.setFont(new Font("Arial", Font.PLAIN, 21));
+        processarTransportesPendentes.add(new JScrollPane(mensagemArea), BorderLayout.CENTER);
 
-    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    buttonPanel.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
-        BorderFactory.createEmptyBorder(10, 10, 10, 10)
-    ));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
 
-    JButton processarButton = new JButton("Processar Transportes");
-    JButton terminarButton = new JButton("Terminar");
+        JButton processarButton = new JButton("Processar Transportes");
+        JButton terminarButton = new JButton("Terminar");
 
-    processarButton.setFont(new Font("Arial", Font.BOLD, 25));
-    processarButton.setBackground(new Color(60, 179, 113)); // Verde
-    processarButton.setForeground(Color.WHITE);
+        processarButton.setFont(new Font("Arial", Font.BOLD, 25));
+        processarButton.setBackground(new Color(60, 179, 113)); // Verde
+        processarButton.setForeground(Color.WHITE);
 
-    terminarButton.setFont(new Font("Arial", Font.BOLD, 25));
-    terminarButton.setBackground(Color.RED);
-    terminarButton.setForeground(Color.WHITE);
-    terminarButton.setOpaque(true);
-    terminarButton.setBorderPainted(false);
+        terminarButton.setFont(new Font("Arial", Font.BOLD, 25));
+        terminarButton.setBackground(Color.RED);
+        terminarButton.setForeground(Color.WHITE);
+        terminarButton.setOpaque(true);
+        terminarButton.setBorderPainted(false);
 
-    buttonPanel.add(processarButton);
-    buttonPanel.add(terminarButton);
-    processarTransportesPendentes.add(buttonPanel, BorderLayout.SOUTH);
+        buttonPanel.add(processarButton);
+        buttonPanel.add(terminarButton);
+        processarTransportesPendentes.add(buttonPanel, BorderLayout.SOUTH);
 
-    // Ação para o botão "Terminar"
-    terminarButton.addActionListener(e -> processarTransportesPendentes.dispose());
+        // Ação para o botão "Terminar"
+        terminarButton.addActionListener(e -> processarTransportesPendentes.dispose());
 
-    // Ação para o botão "Processar Transportes"
-    processarButton.addActionListener(e -> {
-        // Aqui você pode adicionar o código que será executado ao clicar em "Processar Transportes"
-    });
+        // Ação para o botão "Processar Transportes"
+        processarButton.addActionListener(e -> {
+            // Aqui você pode adicionar o código que será executado ao clicar em "Processar Transportes"
+        });
 
-    processarTransportesPendentes.setVisible(true); 
+        processarTransportesPendentes.setVisible(true); 
     }
 
     public void mostrarRelatorioGeral() {
