@@ -1,5 +1,10 @@
 package aplicacao;
 
+import dados.Drone;
+import dados.DroneCarga;
+import dados.DroneCargaInanimada;
+import dados.DroneCargaViva;
+import dados.DronePessoal;
 import dados.Estado;
 import dados.Transporte;
 import dados.TransporteCargaInanimada;
@@ -9,6 +14,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -24,7 +30,7 @@ public class ACMEAirDrones {
     private JPanel panel;
     private Queue<Transporte> transportesPendentes = new LinkedList<>();
     private HashMap<String, String> dronesCadastrados = new HashMap<>();
-    private ArrayList<Transporte> transportes = new ArrayList<>();
+    private HashMap<Drone, Transporte> transportes = new HashMap<>();
     private Transporte transporteCarregado;
 
     public ACMEAirDrones() {
@@ -386,6 +392,8 @@ public class ACMEAirDrones {
         
                 
                 dronesCadastrados.put(codigo, tipo + " - " + detalhes);
+                System.out.println(dronesCadastrados.get("1"));
+                System.out.println(detalhes);
         
                 
                 mensagemArea.setText("Drone " + tipo.toLowerCase() + " cadastrado com sucesso!\n");
@@ -682,7 +690,7 @@ public class ACMEAirDrones {
                     TransportePessoal tp = new TransportePessoal(numero, nomeClienteField.getText().trim(), descricaoField.getText().trim(),
                             peso, latOrigem, latDestino, longOrigem, longDestino, qtdPessoas);
                     transportesPendentes.add(tp);
-                    transportes.add(tp);
+                    transportes.put(null, tp);
                     areaMensagens.setText("Transporte pessoal cadastrado com sucesso.\n");
                 });
 
@@ -770,7 +778,7 @@ public class ACMEAirDrones {
                     TransporteCargaViva tc = new TransporteCargaViva(numero, nomeClienteField.getText().trim(), descricaoField.getText().trim(),
                             peso, latOrigem, latDestino, longOrigem, longDestino, tempMinima, tempMaxima);
                     transportesPendentes.add(tc);
-                    transportes.add(tc);
+                    transportes.put(null, tc);
                     areaMensagens.setText("Transporte de carga viva cadastrado com sucesso.\n");
                 });
 
@@ -851,7 +859,7 @@ public class ACMEAirDrones {
                     TransporteCargaInanimada tci = new TransporteCargaInanimada(numero, nomeClienteField.getText().trim(), descricaoField.getText().trim(),
                             peso, latOrigem, latDestino, longOrigem, longDestino, cargaPerigosa);
                     transportesPendentes.add(tci);
-                    transportes.add(tci);
+                    transportes.put(null, tci);
                     areaMensagens.setText("Transporte de carga inanimada cadastrado com sucesso.\n");
                 });
             }
@@ -884,7 +892,7 @@ public class ACMEAirDrones {
         botaoSair.addActionListener(e -> novoTransporte.dispose());
 
         novoTransporte.setVisible(true);
-    }    
+    }
 
     // Método para processar transportes pendentes
     public void processarTransportesPendentes() {
@@ -906,7 +914,17 @@ public class ACMEAirDrones {
         mensagemArea.setBackground(new Color(255, 250, 240));
         mensagemArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         mensagemArea.setFont(new Font("Arial", Font.PLAIN, 21));
-        processarTransportesPendentes.add(new JScrollPane(mensagemArea), BorderLayout.CENTER);
+
+        StringBuilder dados = new StringBuilder("Transportes Pendentes:\n");
+        for (Transporte t : transportesPendentes) {
+            dados.append(t).append("\n");
+        }
+        mensagemArea.setText(dados.toString());
+
+        JScrollPane scrollPane = new JScrollPane(mensagemArea);
+        processarTransportesPendentes.add(scrollPane, BorderLayout.CENTER);
+
+        mensagemArea.setCaretPosition(0);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -931,15 +949,50 @@ public class ACMEAirDrones {
         buttonPanel.add(terminarButton);
         processarTransportesPendentes.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Ação para o botão "Terminar"
         terminarButton.addActionListener(e -> processarTransportesPendentes.dispose());
 
         // Ação para o botão "Processar Transportes"
         processarButton.addActionListener(e -> {
-            // Aqui você pode adicionar o código que será executado ao clicar em "Processar Transportes"
+            while (!transportesPendentes.isEmpty()) {
+                Transporte t = transportesPendentes.poll();
+                Drone droneAssociado = getDroneAssociado(transportes, t);
+
+                if (droneAssociado == null) {
+                    for (Map.Entry<String, String> entry : dronesCadastrados.entrySet()) {
+                        String droneId = entry.getKey();
+                        String droneDet = entry.getValue();
+                        Drone drone = null;
+                        // ENTRE AQUI
+                        if (droneDet.contains("Pessoal")){
+                            drone = new DronePessoal(Integer.parseInt(droneId), 100, Double.parseDouble(droneDet.substring(0,0)), 0);
+                        } else {
+                            if (t instanceof TransporteCargaInanimada){
+                                drone = new DroneCargaInanimada(Integer.parseInt(droneId), 50, 0, 0, false);
+                            } else if (t instanceof TransporteCargaViva) {
+                                drone = new DroneCargaViva(Integer.parseInt(droneId), 200, 0, 0, false);
+                            }
+                        }
+                        // E AQUI NÃO ESTÁ PRONTO
+                        transportes.put(drone, t);
+                        mensagemArea.setText("Atribuindo o " + drone + " ao " + t);
+                        break;
+                    }
+                } else {
+                    mensagemArea.setText("Transporte "+t+" já tem um drone associado!");
+                }
+            }
         });
 
         processarTransportesPendentes.setVisible(true); 
+    }
+
+    private static Drone getDroneAssociado(HashMap<Drone, Transporte> mapDronesTransporte, Transporte transporte) {
+        for (Map.Entry<Drone, Transporte> entry : mapDronesTransporte.entrySet()) {
+            if (entry.getValue().getNumero() == (transporte.getNumero())) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     public void mostrarRelatorioGeral() {
@@ -1146,7 +1199,7 @@ public class ACMEAirDrones {
                 return;
             }
 
-            for (Transporte t : transportes){
+            for (Transporte t : transportes.values()){
                 if (t.getNumero() == numero){
                     tr = t;
                     transporteInfoArea.setText(t.toString());
@@ -1163,6 +1216,11 @@ public class ACMEAirDrones {
         alterarButton.addActionListener(a -> {
             String situacaoSelecionada = (String) situacaoComboBox.getSelectedItem();
             Estado situacao = Estado.valueOf(situacaoSelecionada);
+            if (transporteCarregado.getSituacao() == Estado.TERMINADO ||
+                transporteCarregado.getSituacao() == Estado.ALOCADO){
+                transporteInfoArea.setText("Erro: Se um transporte estiver TERMINADO OU CANCELADO, sua situação não pode mais ser alterada.");
+                return;
+            }
 
             if (situacao == transporteCarregado.getSituacao()){
                 transporteInfoArea.setText("Erro: A nova situação deve ser DIFERENTE da situação atual.");
