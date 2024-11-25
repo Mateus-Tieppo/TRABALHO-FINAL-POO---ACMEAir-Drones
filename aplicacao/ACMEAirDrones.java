@@ -33,7 +33,9 @@ public class ACMEAirDrones {
     private HashMap<Drone, Transporte> transportes = new HashMap<>();
     private Transporte transporteCarregado;
 
-    public ACMEAirDrones() {
+    public ACMEAirDrones() {}
+
+    public void executar() {
         frame = new JFrame("ACME Air Drones - Sistema de Gerenciamento");
         panel = new JPanel();
         panel.setLayout(new GridLayout(0, 2)); 
@@ -392,8 +394,6 @@ public class ACMEAirDrones {
         
                 
                 dronesCadastrados.put(codigo, tipo + " - " + detalhes);
-                System.out.println(dronesCadastrados.get("1"));
-                System.out.println(detalhes);
         
                 
                 mensagemArea.setText("Drone " + tipo.toLowerCase() + " cadastrado com sucesso!\n");
@@ -894,6 +894,8 @@ public class ACMEAirDrones {
         novoTransporte.setVisible(true);
     }
 
+    private boolean todosProcessados = false;
+
     // Método para processar transportes pendentes
     public void processarTransportesPendentes() {
         JFrame processarTransportesPendentes = new JFrame("Transportes Pendentes");
@@ -953,32 +955,40 @@ public class ACMEAirDrones {
 
         // Ação para o botão "Processar Transportes"
         processarButton.addActionListener(e -> {
-            while (!transportesPendentes.isEmpty()) {
-                Transporte t = transportesPendentes.poll();
-                Drone droneAssociado = getDroneAssociado(transportes, t);
-
-                if (droneAssociado == null) {
-                    for (Map.Entry<String, String> entry : dronesCadastrados.entrySet()) {
-                        String droneId = entry.getKey();
-                        String droneDet = entry.getValue();
-                        Drone drone = null;
-                        // ENTRE AQUI
-                        if (droneDet.contains("Pessoal")){
-                            drone = new DronePessoal(Integer.parseInt(droneId), 100, Double.parseDouble(droneDet.substring(0,0)), 0);
-                        } else {
-                            if (t instanceof TransporteCargaInanimada){
-                                drone = new DroneCargaInanimada(Integer.parseInt(droneId), 50, 0, 0, false);
-                            } else if (t instanceof TransporteCargaViva) {
-                                drone = new DroneCargaViva(Integer.parseInt(droneId), 200, 0, 0, false);
+            if (todosProcessados) {
+                mensagemArea.setText("Não há mais transportes pendentes para serem processados");
+            } else {
+                while (!transportesPendentes.isEmpty()) {
+                    Transporte t = transportesPendentes.poll();
+                    Drone droneAssociado = getDroneAssociado(transportes, t);
+    
+                    if (droneAssociado == null) {
+                        for (Map.Entry<String, String> entry : dronesCadastrados.entrySet()) {
+                            String droneId = entry.getKey();
+                            String droneDet = entry.getValue();
+                            Drone drone = null;
+                            // ENTRE AQUI
+                            if (droneDet.contains("Pessoal")){
+                                drone = new DronePessoal(Integer.parseInt(droneId), 100, 0, 0);
+                            } else {
+                                if (t instanceof TransporteCargaInanimada){
+                                    drone = new DroneCargaInanimada(Integer.parseInt(droneId), 50, 0, 0, false);
+                                } else if (t instanceof TransporteCargaViva) {
+                                    drone = new DroneCargaViva(Integer.parseInt(droneId), 200, 0, 0, false);
+                                }
                             }
+                            // E AQUI NÃO ESTÁ PRONTO
+                            transportes.put(drone, t);
+                            t.setSituacao(Estado.ALOCADO);
+                            mensagemArea.setText("Atribuindo o Drone -> " + drone.toString() + " ao Transporte -> " + t);
+                            break;
                         }
-                        // E AQUI NÃO ESTÁ PRONTO
-                        transportes.put(drone, t);
-                        mensagemArea.setText("Atribuindo o " + drone + " ao " + t);
-                        break;
+                    } else {
+                        mensagemArea.setText("Transporte "+t+" já tem um drone associado!");
                     }
-                } else {
-                    mensagemArea.setText("Transporte "+t+" já tem um drone associado!");
+                }
+                if (transportesPendentes.isEmpty()) {
+                    todosProcessados = true;
                 }
             }
         });
@@ -1261,13 +1271,5 @@ public class ACMEAirDrones {
             System.exit(0); // Finaliza a aplicação
         }
         // Caso o usuário clique em "Não", não faz nada
-    }
-
-    public static void main(String[] args) {
-        new ACMEAirDrones();
-    }
-
-    public void executar() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

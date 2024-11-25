@@ -12,6 +12,10 @@ public class DroneCargaInanimada extends DroneCarga {
         return protecao;
     }
 
+    public String toString(){
+        return "Código: "+getCodigo()+", Custo Fixo: "+getCustoFixo()+", Autonomia: "+getAutonomia()+", Peso Máximo: "+getPesoMaximo()+", Proteção: "+this.protecao;
+    }
+
     @Override
     public double calculaCustoKM() {
         double custoFixo = getCustoFixo();
