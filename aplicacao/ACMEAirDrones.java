@@ -1077,13 +1077,41 @@ public class ACMEAirDrones {
                         if (!dronesDisponiveis.isEmpty()){
                             boolean droneAtribuido = false;
                             for (Drone d1 : dronesDisponiveis){
-                                if ((d1 instanceof DronePessoal && t instanceof TransportePessoal) ||
-                                    (d1 instanceof DroneCargaViva && t instanceof TransporteCargaViva) ||
-                                    (d1 instanceof DroneCargaInanimada && t instanceof TransporteCargaInanimada)){
+                                if (d1 instanceof DronePessoal && t instanceof TransportePessoal){
+                                    if (((DronePessoal) d1).getQtdMaxPessoas() < ((TransportePessoal) t).getQtdPessoas()){
+                                        mensagemArea.append("Erro: Não foi possível assinalar Drone de código "+d1.getCodigo()+", ao Transporte de número "+t.getNumero()+", pois a quantidade de pessoas do Transporte excede a capacidade de pessoas do Drone.\n");
+                                        transportesPendentes.add(t);
+                                        return;
+                                    } else {
+                                        transportesFinalizados.put(d1, t);
+                                        t.setSituacao(Estado.ALOCADO);
+                                        mensagemArea.append("\nAtribuindo o Drone - > ("+d1.toString()+") ao Transporte -> ("+t.toString()+")\n");
+                                        droneAtribuido = true;
+                                    }
+
+                                } else if (d1 instanceof DroneCargaViva && t instanceof TransporteCargaViva){
+                                    if (!((DroneCargaViva) d1).getClimatizado() && (((TransporteCargaViva) t).getTemperaturaMaxima() > 36 && ((TransporteCargaViva) t).getTemperaturaMinima() < 20)){
+                                        mensagemArea.append("Erro: Não foi possível assinalar Drone de código "+d1.getCodigo()+", ao Transporte de número "+t.getNumero()+", pois o Drone não é climatizado, impossibilitando as temperaturas necessárias para o Transporte.\n");
+                                        transportesPendentes.add(t);
+                                        return;
+                                    } else {
+                                        transportesFinalizados.put(d1, t);
+                                        t.setSituacao(Estado.ALOCADO);
+                                        mensagemArea.append("\nAtribuindo o Drone - > ("+d1.toString()+") ao Transporte -> ("+t.toString()+")\n");
+                                        droneAtribuido = true;
+                                    }
+
+                                } else if (d1 instanceof DroneCargaInanimada && t instanceof TransporteCargaInanimada){
+                                    if (!((DroneCargaInanimada) d1).getProtecao() && ((TransporteCargaInanimada) t).getCargaPerigosa()){
+                                        mensagemArea.append("Erro: Não foi possível assinalar Drone de código "+d1.getCodigo()+", ao Transporte de número "+t.getNumero()+", pois o Drone não possui proteção, impossibilitando levar a carga perigosa.\n");
+                                        transportesPendentes.add(t);
+                                        return;
+                                    } else {
                                     transportesFinalizados.put(d1, t);
                                     t.setSituacao(Estado.ALOCADO);
                                     mensagemArea.append("\nAtribuindo o Drone - > ("+d1.toString()+") ao Transporte -> ("+t.toString()+")\n");
                                     droneAtribuido = true;
+                                    }
                                 }
                             } 
                             if (!droneAtribuido){
@@ -1149,10 +1177,15 @@ public class ACMEAirDrones {
             relatorioGeral.append(d.toString() + "\n");
         }
 
-        relatorioGeral.append("\n-- TRANSPORTES: --\n");
-        for (Transporte t : transportes) {
+        relatorioGeral.append("\n-- TRANSPORTES PENDENTES: --\n");
+        for (Transporte t : transportesPendentes) {
             relatorioGeral.append(t.toString() + "\n");
         }
+
+        relatorioGeral.append("\n-- TRANSPORTES FINALIZADOS: --\n");
+        transportesFinalizados.forEach((Drone d, Transporte t) ->{
+            relatorioGeral.append("\nTransporte -> ("+t.toString() + "),  Drone -> (" + d.toString()+"), Custo Final = "+t.calculaCusto(d)+"\n");
+        });
 
         relatorioArea.setText(relatorioGeral.toString());
 
