@@ -544,13 +544,16 @@ public class ACMEAirDrones {
         JPanel tituloPanel = new JPanel();
         tituloPanel.setLayout(new BorderLayout()); // Usando BorderLayout para centralizar o título
 
-        // Criando o JLabel com o texto e alinhamento
-        JLabel titulo = new JLabel("ACME - Cadastrar Novo Transporte", JLabel.CENTER);
+        // Criar o título
+        JLabel titulo = new JLabel("ACME - Cadastrar Novo Transporte", JLabel.CENTER); // Centraliza o título
         titulo.setFont(new Font("Arial", Font.BOLD, 70)); // Define o tamanho e estilo da fonte
-        titulo.setForeground(Color.RED); // Cor do texto (Vermelho)
+        titulo.setForeground(Color.RED); // Cor do texto
 
-        // Adiciona o painel de título ao JFrame
-        novoTransporte.add(tituloPanel, BorderLayout.NORTH);
+        // Adicionar o título ao painel
+        tituloPanel.add(titulo, BorderLayout.CENTER);
+
+        // Adicionar o painel ao JFrame
+        novoTransporte.add(tituloPanel, BorderLayout.NORTH); // Adiciona o painel ao topo da janela
     
         JPanel inputPanel = new JPanel(new GridBagLayout());
         GridBagConstraints grid = new GridBagConstraints();
@@ -1001,7 +1004,7 @@ public class ACMEAirDrones {
 
         JLabel tituloProcessarTransportesPendentes = new JLabel("Processar Transportes Pendentes", JLabel.CENTER);
         tituloProcessarTransportesPendentes.setFont(new Font("Arial", Font.BOLD, 70));
-        tituloProcessarTransportesPendentes.setForeground(new Color(255, 0, 0));
+        tituloProcessarTransportesPendentes.setForeground(new Color(255, 0, 0)); // Vermelho
         tituloProcessarTransportesPendentes.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
         processarTransportesPendentes.add(tituloProcessarTransportesPendentes, BorderLayout.NORTH);
 
@@ -1218,129 +1221,152 @@ public class ACMEAirDrones {
     };
 
     public void alterarSituacaoTransporte() {
-        // Criando a janela para alterar a situação do transporte
-        JFrame alterarSituacaoButton = new JFrame("Alterar Situação do Transporte");
-        alterarSituacaoButton.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        alterarSituacaoButton.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        alterarSituacaoButton.setLayout(new BorderLayout(10, 10));
-    
-        // Título da janela
-        JLabel tituloLabel = new JLabel("Alterar Situação do Transporte", JLabel.CENTER);
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        tituloLabel.setForeground(Color.BLACK);
-        tituloLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        alterarSituacaoButton.add(tituloLabel, BorderLayout.NORTH);
-    
-        // Painel central para exibir os dados do transporte
-        JPanel centralPanel = new JPanel();
-        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
-    
-        // Campo de texto para inserir o número do transporte
-        JTextField numeroTextField = new JTextField(10);
-        numeroTextField.setFont(new Font("Arial", Font.PLAIN, 18));
-        centralPanel.add(new JLabel("Número do Transporte:"));
-        centralPanel.add(numeroTextField);
-    
-        // Área de texto para exibir os dados do transporte
-        JTextArea transporteInfoArea = new JTextArea(10, 40);
-        transporteInfoArea.setEditable(false); // Não pode editar
-        transporteInfoArea.setFont(new Font("Arial", Font.PLAIN, 16));
-        transporteInfoArea.setBackground(new Color(255, 250, 240)); // Fundo claro
-        centralPanel.add(new JScrollPane(transporteInfoArea));
-    
-        // ComboBox para selecionar a nova situação
-        String[] situacoes = {"PENDENTE", "ALOCADO", "TERMINADO", "CANCELADO"};
-        JComboBox<String> situacaoComboBox = new JComboBox<>(situacoes);
-        centralPanel.add(new JLabel("Nova Situação:"));
-        centralPanel.add(situacaoComboBox);
-    
-        // Botões de ação
-        JPanel buttonPanel = new JPanel();
-        JButton buscarButton = new JButton("Buscar");
-        JButton alterarButton = new JButton("Alterar Situação");
-        JButton cancelarButton = new JButton("Cancelar");
-    
-        // Definir fontes e cores dos botões
-        buscarButton.setFont(new Font("Arial", Font.BOLD, 16));
-        buscarButton.setBackground(new Color(60, 179, 113)); // Verde
-        buscarButton.setForeground(Color.WHITE);
-    
-        alterarButton.setFont(new Font("Arial", Font.BOLD, 16));
-        alterarButton.setBackground(new Color(0, 123, 255)); // Azul
-        alterarButton.setForeground(Color.WHITE);
-    
-        cancelarButton.setFont(new Font("Arial", Font.BOLD, 16));
-        cancelarButton.setBackground(new Color(255, 69, 0)); // Vermelho
-        cancelarButton.setForeground(Color.WHITE);
-    
-        buttonPanel.add(buscarButton);
-        buttonPanel.add(alterarButton);
-        buttonPanel.add(cancelarButton);
-        centralPanel.add(buttonPanel);
-    
-        alterarSituacaoButton.add(centralPanel, BorderLayout.CENTER);
-    
-        buscarButton.addActionListener(e -> {
-            Transporte tr = null;
+    // Criando a janela para alterar a situação do transporte
+    JFrame alterarSituacaoButton = new JFrame("Alterar Situação do Transporte");
+    alterarSituacaoButton.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    alterarSituacaoButton.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    alterarSituacaoButton.setLayout(new BorderLayout(10, 10));
 
-            try {
-                tr = transportes.get(0);
-            } catch (IndexOutOfBoundsException ex) {
-                transporteInfoArea.setText("Erro: Nenhum transporte disponível.");
-                return;
+    // Título da janela
+    JLabel tituloLabel = new JLabel("ACME - Alterar Situação do Transporte", JLabel.CENTER);
+    tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); // Aumentando o tamanho da fonte
+    tituloLabel.setForeground(Color.RED);
+    tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Maior espaçamento
+    alterarSituacaoButton.add(tituloLabel, BorderLayout.NORTH);
+
+    // Painel central para exibir os dados do transporte
+    JPanel centralPanel = new JPanel();
+    centralPanel.setLayout(new GridBagLayout()); // Usando GridBagLayout para um layout mais flexível
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.insets = new Insets(20, 20, 20, 20); // Espaçamento entre os componentes
+
+    // Campo de texto para inserir o número do transporte
+    JLabel numeroLabel = new JLabel("Número do Transporte:");
+    numeroLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
+    JTextField numeroTextField = new JTextField(30); // Aumentando a largura do campo
+    numeroTextField.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+    
+    gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+    centralPanel.add(numeroLabel, gbc);
+    gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
+    centralPanel.add(numeroTextField, gbc);
+
+    // Área de texto para exibir os dados do transporte
+    JTextArea transporteInfoArea = new JTextArea(15, 60); // Aumentando a altura e a largura
+    transporteInfoArea.setEditable(false); // Não pode editar
+    transporteInfoArea.setFont(new Font("Arial", Font.PLAIN, 20)); // Fonte maior
+    transporteInfoArea.setBackground(new Color(255, 250, 240)); // Fundo claro
+    JScrollPane scrollPane = new JScrollPane(transporteInfoArea);
+    
+    gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+    centralPanel.add(scrollPane, gbc);
+
+    // ComboBox para selecionar a nova situação
+    JLabel situacaoLabel = new JLabel("Nova Situação:");
+    situacaoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
+    String[] situacoes = {"PENDENTE", "ALOCADO", "TERMINADO", "CANCELADO"};
+    JComboBox<String> situacaoComboBox = new JComboBox<>(situacoes);
+    situacaoComboBox.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+
+    gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+    centralPanel.add(situacaoLabel, gbc);
+    gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
+    centralPanel.add(situacaoComboBox, gbc);
+
+    // Botões de ação
+    JPanel buttonPanel = new JPanel();
+    buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); // Distribuir botões de forma mais equilibrada
+    JButton buscarButton = new JButton("Buscar");
+    JButton alterarButton = new JButton("Alterar Situação");
+    JButton cancelarButton = new JButton("Cancelar");
+
+    // Definir fontes e cores dos botões
+    buscarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
+    buscarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
+    buscarButton.setBackground(new Color(128, 128, 128));
+    buscarButton.setForeground(Color.WHITE);
+    
+    alterarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
+    alterarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
+    alterarButton.setBackground(new Color(128, 128, 128));
+    alterarButton.setForeground(Color.WHITE);
+    
+    cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
+    cancelarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
+    cancelarButton.setBackground(new Color(255, 0, 0)); // Vermelho
+    cancelarButton.setForeground(Color.WHITE);
+
+    buttonPanel.add(buscarButton);
+    buttonPanel.add(alterarButton);
+    buttonPanel.add(cancelarButton);
+
+    gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
+    centralPanel.add(buttonPanel, gbc);
+
+    alterarSituacaoButton.add(centralPanel, BorderLayout.CENTER);
+
+    buscarButton.addActionListener(e -> {
+        Transporte tr = null;
+
+        try {
+            tr = transportes.get(0);
+        } catch (IndexOutOfBoundsException ex) {
+            transporteInfoArea.setText("Erro: Nenhum transporte disponível.");
+            return;
+        }
+
+        int numero;
+        String numeroStr = numeroTextField.getText().trim();
+
+        try {
+            numero = Integer.parseInt(numeroStr);
+        } catch (NumberFormatException ex){
+            transporteInfoArea.setText("Erro: O número do transporte deve ser um número válido.\n");
+            return;
+        }
+
+        if (numeroStr.isEmpty()) {
+            JOptionPane.showMessageDialog(alterarSituacaoButton, "Por favor, insira o número do transporte.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        for (Transporte t : transportes.values()){
+            if (t.getNumero() == numero){
+                tr = t;
+                transporteInfoArea.setText(t.toString());
             }
+        }
 
-            int numero;
-            String numeroStr = numeroTextField.getText().trim();
+        if (tr == null){
+            transporteInfoArea.setText("Erro: Não existe um transporte com esse número.");
+        }
 
-            try {
-                numero = Integer.parseInt(numeroStr);
-            } catch (NumberFormatException ex){
-                transporteInfoArea.setText("Erro: O número do transporte deve ser um número válido.\n");
-                return;
-            }
+        ct.carregarTransporte(tr);
+    });
 
-            if (numeroStr.isEmpty()) {
-                JOptionPane.showMessageDialog(alterarSituacaoButton, "Por favor, insira o número do transporte.", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+    alterarButton.addActionListener(a -> {
+        String situacaoSelecionada = (String) situacaoComboBox.getSelectedItem();
+        Estado situacao = Estado.valueOf(situacaoSelecionada);
+        if (transporteCarregado.getSituacao() == Estado.TERMINADO ||
+            transporteCarregado.getSituacao() == Estado.ALOCADO){
+            transporteInfoArea.setText("Erro: Se um transporte estiver TERMINADO OU CANCELADO, sua situação não pode mais ser alterada.");
+            return;
+        }
 
-            for (Transporte t : transportes.values()){
-                if (t.getNumero() == numero){
-                    tr = t;
-                    transporteInfoArea.setText(t.toString());
-                }
-            }
+        if (situacao == transporteCarregado.getSituacao()){
+            transporteInfoArea.setText("Erro: A nova situação deve ser DIFERENTE da situação atual.");
+        } else {
+            transporteCarregado.setSituacao(situacao);
+            transporteInfoArea.setText("Situação alterada com sucesso!");
+        }
+    });
 
-            if (tr == null){
-                transporteInfoArea.setText("Erro: Não existe um transporte com esse número.");
-            }
+    cancelarButton.addActionListener(e -> {alterarSituacaoButton.dispose();});
 
-            ct.carregarTransporte(tr);
-        });
+    alterarSituacaoButton.setVisible(true);
+    }
 
-        alterarButton.addActionListener(a -> {
-            String situacaoSelecionada = (String) situacaoComboBox.getSelectedItem();
-            Estado situacao = Estado.valueOf(situacaoSelecionada);
-            if (transporteCarregado.getSituacao() == Estado.TERMINADO ||
-                transporteCarregado.getSituacao() == Estado.ALOCADO){
-                transporteInfoArea.setText("Erro: Se um transporte estiver TERMINADO OU CANCELADO, sua situação não pode mais ser alterada.");
-                return;
-            }
-
-            if (situacao == transporteCarregado.getSituacao()){
-                transporteInfoArea.setText("Erro: A nova situação deve ser DIFERENTE da situação atual.");
-            } else {
-                transporteCarregado.setSituacao(situacao);
-                transporteInfoArea.setText("Situação alterada com sucesso!");
-            }
-
-        });
-
-        cancelarButton.addActionListener(e -> {alterarSituacaoButton.dispose();});
-
-        alterarSituacaoButton.setVisible(true);
-    }  
 
     public void lerDadosSimulacao() {
     }
