@@ -10,6 +10,7 @@ import dados.TransporteCargaInanimada;
 import dados.TransporteCargaViva;
 import dados.TransportePessoal;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -552,27 +553,18 @@ public class ACMEAirDrones {
     
     private void telaCadastroTransporte() {
         JFrame tipoTransporte = new JFrame("Escolha o Tipo de Transporte");
+        tipoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        tipoTransporte.setLayout(new BorderLayout(20, 10));
+        tipoTransporte.setSize(900,600);
         
         // Título com estilo personalizado
         JLabel tituloLabel = new JLabel("ACME - Escolha o Tipo de Transporte", JLabel.CENTER);
         tituloLabel.setFont(new Font("Arial", Font.BOLD, 70)); // Aumenta o tamanho da fonte para dar destaque
         tituloLabel.setForeground(new Color(255,0,0)); 
-        tituloLabel.setBackground(new Color(240, 240, 240)); // Cor de fundo suave
-        tituloLabel.setOpaque(true); // Torna o fundo visível
-        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0)); // Espaçamento no topo e na parte inferior
-
-        // Configura a janela para abrir em tela cheia
-        tipoTransporte.setExtendedState(JFrame.MAXIMIZED_BOTH); // Tela cheia
-        tipoTransporte.setUndecorated(false); // Barra de título visível
-        tipoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha ao clicar no "X"
-        tipoTransporte.setLayout(new BorderLayout(10, 10)); // Layout com margem
-
-        // Adicionando o título à parte superior da janela
         tipoTransporte.add(tituloLabel, BorderLayout.NORTH);
 
         // Painel central com grid para os botões
-        JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 10, 10)); // Grid de 3 linhas com espaçamento de 10px entre os botões
-        buttonPanel.setBackground(Color.WHITE); // Cor de fundo para o painel de botões
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         // Criando os botões com estilo moderno
         JButton pessoalButton = new JButton("Transporte Pessoal");
@@ -580,25 +572,23 @@ public class ACMEAirDrones {
         JButton cargaInanimadaButton = new JButton("Transporte de Carga Inanimada");
 
         // Estilo para os botões
-        Font buttonFont = new Font("Arial", Font.BOLD, 30); // Fonte para os botões
+        Font buttonFont = new Font("Arial", Font.BOLD, 50); // Fonte para os botões
         pessoalButton.setFont(buttonFont);
         cargaVivaButton.setFont(buttonFont);
         cargaInanimadaButton.setFont(buttonFont);
 
         // Cores de fundo dos botões
-        pessoalButton.setBackground(new Color(76, 175, 80)); // Verde
-        cargaVivaButton.setBackground(new Color(33, 150, 243)); // Azul
-        cargaInanimadaButton.setBackground(new Color(244, 67, 54)); // Vermelho
+        pessoalButton.setBackground(Color.LIGHT_GRAY);
+        cargaVivaButton.setBackground(Color.LIGHT_GRAY);
+        cargaInanimadaButton.setBackground(Color.LIGHT_GRAY);
 
-        // Cores de texto dos botões
-        pessoalButton.setForeground(Color.WHITE);
-        cargaVivaButton.setForeground(Color.WHITE);
-        cargaInanimadaButton.setForeground(Color.WHITE);
+        pessoalButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3)); 
+        cargaVivaButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+        cargaInanimadaButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 
-        // Efeito de foco nos botões
-        pessoalButton.setFocusPainted(false);
-        cargaVivaButton.setFocusPainted(false);
-        cargaInanimadaButton.setFocusPainted(false);
+        pessoalButton.setPreferredSize(new Dimension(300, 200));
+        cargaVivaButton.setPreferredSize(new Dimension(300, 200));
+        cargaInanimadaButton.setPreferredSize(new Dimension(300, 200));
 
         // Adicionando os botões ao painel
         buttonPanel.add(pessoalButton);
@@ -608,461 +598,383 @@ public class ACMEAirDrones {
         // Adicionando o painel com os botões à janela
         tipoTransporte.add(buttonPanel, BorderLayout.CENTER);
 
-        // Personalizar os botões usando o método customizeButton
-        customizeButton(pessoalButton);
-        customizeButton(cargaVivaButton);
-        customizeButton(cargaInanimadaButton);
-
         // Ações dos botões
-        pessoalButton.addActionListener(e -> cadastrarTransporte("Pessoal"));
-        cargaVivaButton.addActionListener(e -> cadastrarTransporte("Carga Viva"));
-        cargaInanimadaButton.addActionListener(e -> cadastrarTransporte("Carga Inanimada"));
+        pessoalButton.addActionListener(e ->{
+            tipoTransporte.dispose();
+            cadastrarTransporte("Pessoal");
+        });
+        cargaVivaButton.addActionListener(e -> {
+            tipoTransporte.dispose();
+            cadastrarTransporte("Carga Viva");
+        });
+        cargaInanimadaButton.addActionListener(e -> {
+            tipoTransporte.dispose();
+            cadastrarTransporte("Carga Inanimada");
+        });
 
         // Tornar a janela visível
         tipoTransporte.setVisible(true);
     }
 
-    private boolean parseBooleanSafe(String input){
-        if ("true".equalsIgnoreCase(input)) {
-            return true;
-        } else if ("false".equalsIgnoreCase(input)) {
-            return false;
-        } else {
-            throw new IllegalArgumentException("Valor inválido para Boolean. Use 'true' ou 'false'.");
-        }
-    }
-
     public void cadastrarTransporte(String tipoTransporte) {
-        JFrame novoTransporte = new JFrame("Cadastrar Novo Transporte");
+        JFrame novoTransporte = new JFrame("Cadastrar Transporte "+ tipoTransporte);
         novoTransporte.setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximiza a janela
-        novoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha a janela quando clicado
-
-        // Criar o painel para o título
-        JPanel tituloPanel = new JPanel();
-        tituloPanel.setLayout(new BorderLayout()); // Usando BorderLayout para centralizar o título
+        novoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        novoTransporte.setLayout(new BorderLayout(10,10));
 
         // Criar o título
-        JLabel titulo = new JLabel("ACME - Cadastrar Novo Transporte", JLabel.CENTER); // Centraliza o título
-        titulo.setFont(new Font("Arial", Font.BOLD, 70)); // Define o tamanho e estilo da fonte
-        titulo.setForeground(Color.RED); // Cor do texto
-
-        // Adicionar o título ao painel
-        tituloPanel.add(titulo, BorderLayout.CENTER);
-
-        // Adicionar o painel ao JFrame
-        novoTransporte.add(tituloPanel, BorderLayout.NORTH); // Adiciona o painel ao topo da janela
+        JLabel titulo = new JLabel("Cadastro de Transporte - Tipo: "+tipoTransporte, JLabel.CENTER); // Centraliza o título
+        titulo.setFont(new Font("Arial", Font.BOLD, 50)); // Define o tamanho e estilo da fonte
+        titulo.setForeground(new Color(255,0,0)); // Cor do texto
+        titulo.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+        novoTransporte.add(titulo, BorderLayout.NORTH);
     
         JPanel inputPanel = new JPanel(new GridBagLayout());
+        inputPanel.setBackground(new Color(255,255,255));
+        inputPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1), 
+            BorderFactory.createEmptyBorder(20, 20, 20, 20)));
+
         GridBagConstraints grid = new GridBagConstraints();
-        grid.insets = new Insets(5, 5, 5, 5);
+        grid.insets = new Insets(10, 10, 10, 10);
+
+        grid.fill = GridBagConstraints.HORIZONTAL;
+        grid.weightx = 1.0;
+        grid.ipadx = 50;
+        grid.ipady = 10;
+
+        Dimension preferredSize = new Dimension(300, 40);
     
-        JTextField numeroField = new JTextField(15);
-        JTextField nomeClienteField = new JTextField(15);
-        JTextField descricaoField = new JTextField(15);
-        JTextField pesoField = new JTextField(15);
-        JTextField latOrigemField = new JTextField(15);
-        JTextField latDestinoField = new JTextField(15);
-        JTextField longOrigemField = new JTextField(15);
-        JTextField longDestinoField = new JTextField(15);
-        JTextArea areaMensagens = new JTextArea(10, 30);
-        areaMensagens.setEditable(false);
-        areaMensagens.setWrapStyleWord(true);
-        areaMensagens.setLineWrap(true);
-    
-        JScrollPane scrollPane = new JScrollPane(areaMensagens);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-    
-        JButton botaoConfirma = new JButton("Cadastrar transporte");
-        JButton botaoLimpar = new JButton("Limpar Campos");
-        JButton botaoDados = new JButton("Mostrar Dados");
-        JButton botaoSair = new JButton("Sair");
-        JButton botaoCampos = new JButton("Exibir Campos Específicos");
+        JTextField numeroField = new JTextField();
+        JTextField nomeClienteField = new JTextField();
+        JTextField descricaoField = new JTextField();
+        JTextField pesoField = new JTextField();
+        JTextField latOrigemField = new JTextField();
+        JTextField latDestinoField = new JTextField();
+        JTextField longOrigemField = new JTextField();
+        JTextField longDestinoField = new JTextField();
+        JTextField qtdPessoasField = tipoTransporte.equals("Pessoal") ? new JTextField() : null;
+        JTextField tempMinimaField = tipoTransporte.equals("Carga Viva") ? new JTextField() : null;
+        JTextField tempMaximaField = tipoTransporte.equals("Carga Viva") ? new JTextField() : null;
+        JCheckBox cargaPerigosaBox = tipoTransporte.equals("Carga Inanimada") ? new JCheckBox() : null;
 
-        // Estilizar botões
-        botaoConfirma.setFont(new Font("Arial", Font.BOLD, 25));
-        botaoConfirma.setBackground(new Color(128, 128, 128));
-        botaoConfirma.setForeground(Color.WHITE);
+        numeroField.setPreferredSize(preferredSize);
+        nomeClienteField.setPreferredSize(preferredSize);
+        descricaoField.setPreferredSize(preferredSize);
+        pesoField.setPreferredSize(preferredSize);
+        latOrigemField.setPreferredSize(preferredSize);
+        latDestinoField.setPreferredSize(preferredSize);
+        longOrigemField.setPreferredSize(preferredSize);
+        longDestinoField.setPreferredSize(preferredSize);
 
-        botaoLimpar.setFont(new Font("Arial", Font.BOLD, 25));
-        botaoLimpar.setBackground(new Color(128, 128, 128));
-        botaoLimpar.setForeground(Color.WHITE);
+        if (qtdPessoasField != null){
+            qtdPessoasField.setPreferredSize(preferredSize);
+        }
 
-        botaoDados.setFont(new Font("Arial", Font.BOLD, 25));
-        botaoDados.setBackground(new Color(128, 128, 128)); 
-        botaoDados.setForeground(Color.WHITE);
+        if (tempMinimaField != null){
+            tempMinimaField.setPreferredSize(preferredSize);
+        }
 
-        botaoSair.setFont(new Font("Arial", Font.BOLD, 25));
-        botaoSair.setBackground(Color.RED); // Vermelho
-        botaoSair.setForeground(Color.WHITE);
-        botaoSair.setOpaque(true);
-        botaoSair.setBorderPainted(false);
+        if (tempMaximaField != null){
+            tempMaximaField.setPreferredSize(preferredSize);
+        }
 
-        // Botão Campos Específicos
-        botaoCampos.setFont(new Font("Arial", Font.BOLD, 25));
-        botaoCampos.setBackground(new Color(128, 128, 128));
-        botaoCampos.setForeground(Color.WHITE);
+        if (cargaPerigosaBox != null) {
+            cargaPerigosaBox.setBounds(1, 50, 200, 30);
+        }
 
-        // Alinhamento dos Campos à Esquerda e Mensagens à Direita
-        grid.anchor = GridBagConstraints.WEST;  // Alinhar à esquerda
-    
-        // Adicionando campos de entrada à esquerda
+        Font inputFont = new Font("Arial", Font.PLAIN, 20);
+        numeroField.setFont(inputFont);
+        nomeClienteField.setFont(inputFont);
+        descricaoField.setFont(inputFont);
+        pesoField.setFont(inputFont);
+        latOrigemField.setFont(inputFont);
+        latDestinoField.setFont(inputFont);
+        longOrigemField.setFont(inputFont);
+        longDestinoField.setFont(inputFont);
+
+        numeroField.setBackground(new Color(255,255,255));
+        nomeClienteField.setBackground(new Color(255,255,255));
+        descricaoField.setBackground(new Color(255,255,255));
+        pesoField.setBackground(new Color(255,255,255));
+        latOrigemField.setBackground(new Color(255,255,255));
+        latDestinoField.setBackground(new Color(255,255,255));
+        longOrigemField.setBackground(new Color(255,255,255));
+        longDestinoField.setBackground(new Color(255,255,255));
+
+        if (qtdPessoasField != null){
+            qtdPessoasField.setFont(inputFont);
+            qtdPessoasField.setBackground(new Color(255,255,255));
+        }
+        if (tempMinimaField != null){
+            tempMinimaField.setFont(inputFont);
+            tempMinimaField.setBackground(new Color(255,255,255));
+        }
+        if (tempMaximaField != null){
+            tempMaximaField.setFont(inputFont);
+            tempMaximaField.setBackground(new Color(255,255,255));
+        }
+        if (cargaPerigosaBox != null){
+            cargaPerigosaBox.setFont(inputFont);
+            cargaPerigosaBox.setBackground(new Color(255,255,255));
+        }
+
+        Font labelFont = new Font("Arial", Font.BOLD, 28);
+
         grid.gridx = 0; grid.gridy = 0;
-        inputPanel.add(new JLabel("Nº Transporte:"), grid);
+        JLabel numeroLabel = new JLabel("Número do Transporte:");
+        numeroLabel.setFont(labelFont);
+        inputPanel.add(numeroLabel, grid);
+
         grid.gridx = 1; grid.gridy = 0;
         inputPanel.add(numeroField, grid);
 
         grid.gridx = 0; grid.gridy = 1;
-        inputPanel.add(new JLabel("Nome do Cliente:"), grid);
+        JLabel nomeLabel = new JLabel("Nome do Cliente do Transporte:");
+        nomeLabel.setFont(labelFont);
+        inputPanel.add(nomeLabel, grid);
+
         grid.gridx = 1; grid.gridy = 1;
         inputPanel.add(nomeClienteField, grid);
 
         grid.gridx = 0; grid.gridy = 2;
-        inputPanel.add(new JLabel("Descrição do Transporte:"), grid);
+        JLabel descricaoLabel = new JLabel("Descrição do Transporte:");
+        descricaoLabel.setFont(labelFont);
+        inputPanel.add(descricaoLabel, grid);
+
         grid.gridx = 1; grid.gridy = 2;
         inputPanel.add(descricaoField, grid);
 
         grid.gridx = 0; grid.gridy = 3;
-        inputPanel.add(new JLabel("Peso:"), grid);
+        JLabel pesoLabel = new JLabel("Peso do Transporte:");
+        pesoLabel.setFont(labelFont);
+        inputPanel.add(pesoLabel, grid);
+
         grid.gridx = 1; grid.gridy = 3;
         inputPanel.add(pesoField, grid);
 
         grid.gridx = 0; grid.gridy = 4;
-        inputPanel.add(new JLabel("Latitude de Origem:"), grid);
+        JLabel latOrigemLabel = new JLabel("Latitude de Origem:");
+        latOrigemLabel.setFont(labelFont);
+        inputPanel.add(latOrigemLabel, grid);
+
         grid.gridx = 1; grid.gridy = 4;
         inputPanel.add(latOrigemField, grid);
 
         grid.gridx = 0; grid.gridy = 5;
-        inputPanel.add(new JLabel("Latitude de Destino:"), grid);
+        JLabel latDestinoLabel = new JLabel("Latitude de Destino:");
+        latDestinoLabel.setFont(labelFont);
+        inputPanel.add(latDestinoLabel, grid);
+
         grid.gridx = 1; grid.gridy = 5;
         inputPanel.add(latDestinoField, grid);
 
         grid.gridx = 0; grid.gridy = 6;
-        inputPanel.add(new JLabel("Longitude de Origem:"), grid);
+        JLabel longOrigemLabel = new JLabel("Longitude de Origem:");
+        longOrigemLabel.setFont(labelFont);
+        inputPanel.add(longOrigemLabel, grid);
+
         grid.gridx = 1; grid.gridy = 6;
         inputPanel.add(longOrigemField, grid);
 
         grid.gridx = 0; grid.gridy = 7;
-        inputPanel.add(new JLabel("Longitude de Destino:"), grid);
+        JLabel longDestinoLabel = new JLabel("Longitude de Destino:");
+        longDestinoLabel.setFont(labelFont);
+        inputPanel.add(longDestinoLabel, grid);
+
         grid.gridx = 1; grid.gridy = 7;
         inputPanel.add(longDestinoField, grid);
 
-        // Colocando o painel de entrada no canto esquerdo
-        novoTransporte.add(inputPanel, BorderLayout.WEST);
-        // Colocando o painel de mensagens no centro
-        novoTransporte.add(scrollPane, BorderLayout.CENTER);
+        if (qtdPessoasField != null) {
+            grid.gridx = 0; grid.gridy = 8;
+            JLabel qtdPessoasLabel = new JLabel("Quantidade de Pessoas:");
+            qtdPessoasLabel.setFont(labelFont);
+            inputPanel.add(qtdPessoasLabel, grid);
+
+            grid.gridx = 1; grid.gridy = 8;
+            inputPanel.add(qtdPessoasField, grid);
+        }
+        if (tempMinimaField != null) {
+            grid.gridx = 0; grid.gridy = 8;
+            JLabel tempMinimaLabel = new JLabel("Temperatura Mínima:");
+            tempMinimaLabel.setFont(labelFont);
+            inputPanel.add(tempMinimaLabel, grid);
+
+            grid.gridx = 1; grid.gridy = 8;
+            inputPanel.add(tempMinimaField, grid);
+        }
+        if (tempMaximaField != null) {
+            grid.gridx = 0; grid.gridy = 9;
+            JLabel tempMaximaLabel = new JLabel("Temperatura Máxima:");
+            tempMaximaLabel.setFont(labelFont);
+            inputPanel.add(tempMaximaLabel, grid);
+
+            grid.gridx = 1; grid.gridy = 9;
+            inputPanel.add(tempMaximaField, grid);
+        }
+        if (cargaPerigosaBox != null) {
+            grid.gridx = 0; grid.gridy = 8;
+            JLabel cargaPerigosaLabel = new JLabel("A Carga é Perigosa?");
+            cargaPerigosaLabel.setFont(labelFont);
+            inputPanel.add(cargaPerigosaLabel, grid);
+
+            grid.gridx = 1; grid.gridy = 8;
+            inputPanel.add(cargaPerigosaBox, grid);
+        }
+
+        JScrollPane scrollPane1 = new JScrollPane(inputPanel);
+        scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        novoTransporte.add(scrollPane1, BorderLayout.WEST);
+
+        JTextArea areaMensagens = new JTextArea(30, 60);
+        areaMensagens.setEditable(false);
+        areaMensagens.setWrapStyleWord(true);
+        areaMensagens.setLineWrap(true);
+        areaMensagens.setBackground(new Color(255,250,240));
+        areaMensagens.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+
+        areaMensagens.setFont(new Font("Arial", Font.PLAIN, 21));
     
-        // Organizando os botões na parte inferior
+        JScrollPane scrollPane = new JScrollPane(areaMensagens);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        novoTransporte.add(scrollPane, BorderLayout.CENTER);
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+    
+        JButton botaoConfirma = new JButton("Salvar");
+        JButton botaoLimpar = new JButton("Limpar Campos");
+        JButton botaoDados = new JButton("Mostrar Dados");
+        JButton botaoSair = new JButton("Terminar");
+
+        // Estilizar botões
+        botaoConfirma.setFont(inputFont);
+        botaoLimpar.setFont(inputFont);
+        botaoDados.setFont(inputFont);
+        botaoSair.setFont(inputFont);
+
+        botaoConfirma.setFont(new Font("Arial", Font.BOLD, 25));
+        botaoLimpar.setFont(new Font("Arial", Font.BOLD, 25));
+        botaoDados.setFont(new Font("Arial", Font.BOLD, 25));
+        botaoSair.setFont(new Font("Arial", Font.BOLD, 25));
+
+        botaoConfirma.setBackground(new Color(128,128,128));
+        botaoLimpar.setBackground(new Color(128,128,128));
+        botaoDados.setBackground(new Color(128,128,128));
+        botaoSair.setBackground(new Color(128,128,128));
+
+        botaoConfirma.setForeground(Color.WHITE);
+        botaoConfirma.setForeground(Color.WHITE);
+        botaoConfirma.setForeground(Color.WHITE);
+        botaoConfirma.setForeground(Color.WHITE);
+
+        botaoSair.setBackground(Color.RED);
+        botaoSair.setForeground(Color.WHITE);
+        botaoSair.setOpaque(true);
+        botaoSair.setBorderPainted(false);
+
         buttonPanel.add(botaoConfirma);
         buttonPanel.add(botaoLimpar);
         buttonPanel.add(botaoDados);
         buttonPanel.add(botaoSair);
-        buttonPanel.add(botaoCampos);
+
         novoTransporte.add(buttonPanel, BorderLayout.SOUTH);
-
-        JOptionPane.showMessageDialog(frame, "Atenção! Lembre-se pressionar o botão 'Exibir Campos Específicos', caso contrário, não será possível concluir o cadastro do transporte.");
+        grid.anchor = GridBagConstraints.WEST;
     
-        botaoCampos.addActionListener(e -> {
-            inputPanel.removeAll();
+        botaoConfirma.addActionListener(e -> {
+            try {
+                String numeroStr = numeroField.getText().trim();
+                String nomeCliente = nomeClienteField.getText().trim();
+                String descricao = descricaoField.getText().trim();
+                String pesoStr = pesoField.getText().trim();
+                String latOrigemStr = latOrigemField.getText().trim();
+                String latDestinoStr = latDestinoField.getText().trim();
+                String longOrigemStr = longOrigemField.getText().trim();
+                String longDestinoStr = longDestinoField.getText().trim();
+                String qtdPessoasStr = qtdPessoasField != null ? qtdPessoasField.getText().trim() : null;
+                String tempMinimaStr = tempMinimaField != null ? tempMinimaField.getText().trim() : null;
+                String tempMaximaStr = tempMaximaField != null ? tempMaximaField.getText().trim() : null;
+                Boolean cargaPerigosa = cargaPerigosaBox != null ? cargaPerigosaBox.isSelected() : null;
 
-            grid.gridx = 0; grid.gridy = 0;
-            inputPanel.add(new JLabel("Nº Transporte:"), grid);
-            grid.gridx = 1; grid.gridy = 0;
-            inputPanel.add(numeroField, grid);
-
-            grid.gridx = 0; grid.gridy = 1;
-            inputPanel.add(new JLabel("Nome do Cliente:"), grid);
-            grid.gridx = 1; grid.gridy = 1;
-            inputPanel.add(nomeClienteField, grid);
-
-            grid.gridx = 0; grid.gridy = 2;
-            inputPanel.add(new JLabel("Descrição do Transporte:"), grid);
-            grid.gridx = 1; grid.gridy = 2;
-            inputPanel.add(descricaoField, grid);
-
-            grid.gridx = 0; grid.gridy = 3;
-            inputPanel.add(new JLabel("Peso:"), grid);
-            grid.gridx = 1; grid.gridy = 3;
-            inputPanel.add(pesoField, grid);
-
-            grid.gridx = 0; grid.gridy = 4;
-            inputPanel.add(new JLabel("Latitude de Origem:"), grid);
-            grid.gridx = 1; grid.gridy = 4;
-            inputPanel.add(latOrigemField, grid);
-
-            grid.gridx = 0; grid.gridy = 5;
-            inputPanel.add(new JLabel("Latitude de Destino:"), grid);
-            grid.gridx = 1; grid.gridy = 5;
-            inputPanel.add(latDestinoField, grid);
-
-            grid.gridx = 0; grid.gridy = 6;
-            inputPanel.add(new JLabel("Longitude de Origem:"), grid);
-            grid.gridx = 1; grid.gridy = 6;
-            inputPanel.add(longOrigemField, grid);
-
-            grid.gridx = 0; grid.gridy = 7;
-            inputPanel.add(new JLabel("Longitude de Destino:"), grid);
-            grid.gridx = 1; grid.gridy = 7;
-            inputPanel.add(longDestinoField, grid);
-    
-            if (tipoTransporte.equals("Pessoal")) {
-                JTextField qtdPessoasField = new JTextField(15);
-                grid.gridx = 0; grid.gridy = 8;
-                inputPanel.add(new JLabel("Quantidade de Pessoas:"), grid);
-                grid.gridx = 1; grid.gridy = 8;
-                inputPanel.add(qtdPessoasField, grid);
-
-                botaoConfirma.addActionListener(ae -> {
-                    String numeroString = numeroField.getText().trim();
-                    int numero;
-                    try {
-                        numero = Integer.parseInt(numeroString);
-                    } catch (NumberFormatException ex){
-                        areaMensagens.setText("Erro: O número do transporte deve ser um número válido.\\n");
+                if (numeroStr.isEmpty() || nomeCliente.isEmpty() || descricao.isEmpty() ||
+                    pesoStr.isEmpty() || latOrigemStr.isEmpty() || latDestinoStr.isEmpty() ||
+                    longOrigemStr.isEmpty() || longDestinoStr.isEmpty() || qtdPessoasField != null &&
+                    qtdPessoasStr.isEmpty() || tempMinimaField != null && tempMinimaStr.isEmpty() ||
+                    tempMaximaField != null && tempMaximaStr.isEmpty()){
+                        areaMensagens.setText("Erro: Todos os campos são obrigatórios.\n");
                         return;
                     }
 
-                    for (Transporte t : transportesPendentes) {
-                        if (t.getNumero() == numero) {
-                            areaMensagens.setText("Erro: Já existe um transporte com esse número.\n");
-                            return;
-                        }
+                int numero;
+                int qtdPessoas = 0;
+                try {
+                    numero = Integer.parseInt(numeroStr);
+                    if (qtdPessoasField != null && !qtdPessoasStr.isEmpty()) {
+                        qtdPessoas = Integer.parseInt(qtdPessoasStr);
                     }
 
-                    double peso;
-                    try {
-                        peso = Double.parseDouble(pesoField.getText().trim());
-                        if (peso <= 0) {
-                            areaMensagens.setText("Erro: O peso deve ser maior que 0.\n");
-                            return;
-                        }
-                    } catch (NumberFormatException ex) {
-                        areaMensagens.setText("Erro: O peso deve ser um número válido.\n");
+                } catch (NumberFormatException ex){
+                    areaMensagens.setText("Erro: O números inseridos devem ser um número válido.\n");
+                    return;
+                }
+
+                for (Transporte t : transportesPendentes) {
+                    if (t.getNumero() == numero) {
+                        areaMensagens.setText("Erro: Já existe um transporte com esse número.\n");
                         return;
                     }
+                }
 
-                    double latOrigem, latDestino, longOrigem, longDestino;
-                    try {
-                        latOrigem = Double.parseDouble(latOrigemField.getText().trim());
-                        latDestino = Double.parseDouble(latDestinoField.getText().trim());
-                        longOrigem = Double.parseDouble(longOrigemField.getText().trim());
-                        longDestino = Double.parseDouble(longDestinoField.getText().trim());
+                Double peso;
+                Double latOrigem;
+                Double latDestino;
+                Double longOrigem;
+                Double longDestino;
+                Double tempMinima = 0.0;
+                Double tempMaxima = 0.0;
 
-                        if (latOrigem < -90 || latOrigem > 90) {
-                            areaMensagens.setText("Erro: A latitude de origem deve estar entre -90 e 90.\n");
-                            return;
-                        }
-                        if (latDestino < -90 || latDestino > 90) {
-                            areaMensagens.setText("Erro: A latitude de destino deve estar entre -90 e 90.\n");
-                            return;
-                        }
-                
-                        if (longOrigem < -180 || longOrigem > 180) {
-                            areaMensagens.setText("Erro: A longitude de origem deve estar entre -180 e 180.\n");
-                            return;
-                        }
-                        if (longDestino < -180 || longDestino > 180) {
-                            areaMensagens.setText("Erro: A longitude de destino deve estar entre -180 e 180.\n");
-                            return;
-                        }
-
-                    } catch (NumberFormatException ex) {
-                        areaMensagens.setText("Erro: As coordenadas de origem ou destino devem ser números válidos.\n");
-                        return;
+                try {
+                    peso = Double.parseDouble(pesoStr);
+                    latOrigem = Double.parseDouble(latOrigemStr);
+                    latDestino = Double.parseDouble(latDestinoStr);
+                    longOrigem = Double.parseDouble(longOrigemStr);
+                    longDestino = Double.parseDouble(longDestinoStr);
+                    if (tempMinimaField != null && !tempMinimaStr.isEmpty()) {
+                        tempMinima = Double.parseDouble(tempMinimaStr);
+                    }
+                    if (tempMaximaField != null && !tempMaximaStr.isEmpty()) {
+                        tempMaxima = Double.parseDouble(tempMaximaStr);
                     }
 
-                    int qtdPessoas;
-                    try {
-                        qtdPessoas = Integer.parseInt(qtdPessoasField.getText().trim());
-                        if (qtdPessoas <= 0) {
-                            areaMensagens.setText("Erro: A quantidade de pessoas deve ser maior que 0.\n");
-                            return;
-                        }
-                    } catch (NumberFormatException ex) {
-                        areaMensagens.setText("Erro: A quantidade de pessoas deve ser um número válido.\n");
-                        return;
-                    }
+                } catch (NumberFormatException ex){
+                    areaMensagens.setText("Erro: O números inseridos devem ser um número válido.\n");
+                    return;
+                }
 
-                    TransportePessoal tp = new TransportePessoal(numero, nomeClienteField.getText().trim(), descricaoField.getText().trim(),
-                            peso, latOrigem, latDestino, longOrigem, longDestino, qtdPessoas);
-                    transportesPendentes.add(tp);
-                    transportes.add(tp);
-                    areaMensagens.setText("Transporte pessoal cadastrado com sucesso.\n");
-                });
+                if (tipoTransporte.equals("Pessoal")){
+                    Transporte t = new TransportePessoal(numero, nomeCliente, descricao, peso, latOrigem, latDestino, longOrigem, longDestino, qtdPessoas);
+                    transportesPendentes.add(t);
+                    transportes.add(t);
+                } else if (tipoTransporte.equals("Carga Viva")){
+                    Transporte t = new TransporteCargaViva(numero, nomeCliente, descricao, peso, latOrigem, latDestino, longOrigem, longDestino, tempMinima, tempMaxima);
+                    transportesPendentes.add(t);
+                    transportes.add(t);
+                } else if (tipoTransporte.equals("Carga Inanimada")){
+                    Transporte t = new TransporteCargaInanimada(numero, nomeCliente, descricao, peso, latOrigem, latDestino, longOrigem, longDestino, cargaPerigosa);
+                    transportesPendentes.add(t);
+                    transportes.add(t);
+                }
 
-            } else if (tipoTransporte.equals("Carga Viva")) {
-                JTextField tempMinimaField = new JTextField(15);
-                grid.gridx = 0; grid.gridy = 8;
-                inputPanel.add(new JLabel("Temperatura Mínima:"), grid);
-                grid.gridx = 1; grid.gridy = 8;
-                inputPanel.add(tempMinimaField, grid);
-
-                JTextField tempMaximaField = new JTextField(15);
-                grid.gridx = 0; grid.gridy = 9;
-                inputPanel.add(new JLabel("Temperatura Máxima:"), grid);
-                grid.gridx = 1; grid.gridy = 9;
-                inputPanel.add(tempMaximaField, grid);
-
-                botaoConfirma.addActionListener(ae -> {
-                    String numeroString = numeroField.getText().trim();
-                    int numero;
-                    try {
-                        numero = Integer.parseInt(numeroString);
-                    } catch (NumberFormatException ex){
-                        areaMensagens.setText("Erro: O número do transporte deve ser um número válido.\\n");
-                        return;
-                    }
-
-                    for (Transporte t : transportesPendentes) {
-                        if (t.getNumero() == numero) {
-                            areaMensagens.setText("Erro: Já existe um transporte com esse número.\n");
-                            return;
-                        }
-                    }
-
-                    double peso;
-                    try {
-                        peso = Double.parseDouble(pesoField.getText().trim());
-                        if (peso <= 0) {
-                            areaMensagens.setText("Erro: O peso deve ser maior que 0.\n");
-                            return;
-                        }
-                    } catch (NumberFormatException ex) {
-                        areaMensagens.setText("Erro: O peso deve ser um número válido.\n");
-                        return;
-                    }
-
-                    double latOrigem, latDestino, longOrigem, longDestino;
-                    try {
-                        latOrigem = Double.parseDouble(latOrigemField.getText().trim());
-                        latDestino = Double.parseDouble(latDestinoField.getText().trim());
-                        longOrigem = Double.parseDouble(longOrigemField.getText().trim());
-                        longDestino = Double.parseDouble(longDestinoField.getText().trim());
-
-                        if (latOrigem < -90 || latOrigem > 90) {
-                            areaMensagens.setText("Erro: A latitude de origem deve estar entre -90 e 90.\n");
-                            return;
-                        }
-                        if (latDestino < -90 || latDestino > 90) {
-                            areaMensagens.setText("Erro: A latitude de destino deve estar entre -90 e 90.\n");
-                            return;
-                        }
-                
-                        if (longOrigem < -180 || longOrigem > 180) {
-                            areaMensagens.setText("Erro: A longitude de origem deve estar entre -180 e 180.\n");
-                            return;
-                        }
-                        if (longDestino < -180 || longDestino > 180) {
-                            areaMensagens.setText("Erro: A longitude de destino deve estar entre -180 e 180.\n");
-                            return;
-                        }
-
-                    } catch (NumberFormatException ex) {
-                        areaMensagens.setText("Erro: As coordenadas de origem ou destino devem ser números válidos.\n");
-                        return;
-                    }
-
-                    double tempMinima, tempMaxima;
-                    try {
-                        tempMinima = Double.parseDouble(tempMinimaField.getText().trim());
-                        tempMaxima = Double.parseDouble(tempMaximaField.getText().trim());
-                    } catch (NumberFormatException ex) {
-                        areaMensagens.setText("Erro: As temperaturas devem ser números válidos.\n");
-                        return;
-                    }
-
-                    TransporteCargaViva tc = new TransporteCargaViva(numero, nomeClienteField.getText().trim(), descricaoField.getText().trim(),
-                            peso, latOrigem, latDestino, longOrigem, longDestino, tempMinima, tempMaxima);
-                    transportesPendentes.add(tc);
-                    transportes.add(tc);
-                    areaMensagens.setText("Transporte de carga viva cadastrado com sucesso.\n");
-                });
-
-            } else if (tipoTransporte.equals("Carga Inanimada")) {
-                JTextField cargaPerigosaField = new JTextField(15);
-                grid.gridx = 0; grid.gridy = 8;
-                inputPanel.add(new JLabel("Carga Perigosa?(true ou false):"), grid);
-                grid.gridx = 1; grid.gridy = 8;
-                inputPanel.add(cargaPerigosaField, grid);
-
-                botaoConfirma.addActionListener(ae -> {
-                    String numeroString = numeroField.getText().trim();
-                    int numero;
-                    try {
-                        numero = Integer.parseInt(numeroString);
-                    } catch (NumberFormatException ex){
-                        areaMensagens.setText("Erro: O número do transporte deve ser um número válido.\\n");
-                        return;
-                    }
-
-                    for (Transporte t : transportesPendentes) {
-                        if (t.getNumero() == numero) {
-                            areaMensagens.setText("Erro: Já existe um transporte com esse número.\n");
-                            return;
-                        }
-                    }
-
-                    double peso;
-                    try {
-                        peso = Double.parseDouble(pesoField.getText().trim());
-                        if (peso <= 0) {
-                            areaMensagens.setText("Erro: O peso deve ser maior que 0.\n");
-                            return;
-                        }
-                    } catch (NumberFormatException ex) {
-                        areaMensagens.setText("Erro: O peso deve ser um número válido.\n");
-                        return;
-                    }
-
-                    double latOrigem, latDestino, longOrigem, longDestino;
-                    try {
-                        latOrigem = Double.parseDouble(latOrigemField.getText().trim());
-                        latDestino = Double.parseDouble(latDestinoField.getText().trim());
-                        longOrigem = Double.parseDouble(longOrigemField.getText().trim());
-                        longDestino = Double.parseDouble(longDestinoField.getText().trim());
-
-                        if (latOrigem < -90 || latOrigem > 90) {
-                            areaMensagens.setText("Erro: A latitude de origem deve estar entre -90 e 90.\n");
-                            return;
-                        }
-                        if (latDestino < -90 || latDestino > 90) {
-                            areaMensagens.setText("Erro: A latitude de destino deve estar entre -90 e 90.\n");
-                            return;
-                        }
-                
-                        if (longOrigem < -180 || longOrigem > 180) {
-                            areaMensagens.setText("Erro: A longitude de origem deve estar entre -180 e 180.\n");
-                            return;
-                        }
-                        if (longDestino < -180 || longDestino > 180) {
-                            areaMensagens.setText("Erro: A longitude de destino deve estar entre -180 e 180.\n");
-                            return;
-                        }
-
-                    } catch (NumberFormatException ex) {
-                        areaMensagens.setText("Erro: As coordenadas de origem ou destino devem ser números válidos.\n");
-                        return;
-                    }
-
-                    boolean cargaPerigosa;
-                    try {
-                        cargaPerigosa = parseBooleanSafe(cargaPerigosaField.getText().trim());
-                    } catch (IllegalArgumentException ex) {
-                        areaMensagens.setText("Erro: A condição de carga perigosa deve ser 'true' ou 'false'.\n");
-                        return;
-                    }
-
-                    TransporteCargaInanimada tci = new TransporteCargaInanimada(numero, nomeClienteField.getText().trim(), descricaoField.getText().trim(),
-                            peso, latOrigem, latDestino, longOrigem, longDestino, cargaPerigosa);
-                    transportesPendentes.add(tci);
-                    transportes.add(tci);
-                    areaMensagens.setText("Transporte de carga inanimada cadastrado com sucesso.\n");
-                });
+                areaMensagens.setText("Transporte "+tipoTransporte.toLowerCase()+" cadastrado com sucesso!\n");
+            } catch (Exception ex){
+                areaMensagens.setText("Erro inesperado ao salvar o transporte: "+ex.getMessage()+"\n");
+                ex.printStackTrace();
             }
-
-            inputPanel.revalidate();
-            inputPanel.repaint();
-            novoTransporte.setVisible(true);
         });
 
         botaoLimpar.addActionListener(e -> {
@@ -1074,6 +986,9 @@ public class ACMEAirDrones {
             latDestinoField.setText("");
             longOrigemField.setText("");
             longDestinoField.setText("");
+            qtdPessoasField.setText("");
+            tempMinimaField.setText("");
+            tempMaximaField.setText("");
             areaMensagens.setText("");
         });
 
@@ -1322,153 +1237,164 @@ public class ACMEAirDrones {
     };
 
     public void alterarSituacaoTransporte() {
-    // Criando a janela para alterar a situação do transporte
-    JFrame alterarSituacaoButton = new JFrame("Alterar Situação do Transporte");
-    alterarSituacaoButton.setExtendedState(JFrame.MAXIMIZED_BOTH);
-    alterarSituacaoButton.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    alterarSituacaoButton.setLayout(new BorderLayout(10, 10));
+        // Criando a janela para alterar a situação do transporte
+        JFrame alterarSituacaoButton = new JFrame("Alterar Situação do Transporte");
+        alterarSituacaoButton.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        alterarSituacaoButton.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        alterarSituacaoButton.setLayout(new BorderLayout(10, 10));
 
-    // Título da janela
-    JLabel tituloLabel = new JLabel("ACME - Alterar Situação do Transporte", JLabel.CENTER);
-    tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); // Aumentando o tamanho da fonte
-    tituloLabel.setForeground(Color.RED);
-    tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Maior espaçamento
-    alterarSituacaoButton.add(tituloLabel, BorderLayout.NORTH);
+        // Título da janela
+        JLabel tituloLabel = new JLabel("ACME - Alterar Situação do Transporte", JLabel.CENTER);
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); // Aumentando o tamanho da fonte
+        tituloLabel.setForeground(Color.RED);
+        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Maior espaçamento
+        alterarSituacaoButton.add(tituloLabel, BorderLayout.NORTH);
 
-    // Painel central para exibir os dados do transporte
-    JPanel centralPanel = new JPanel();
-    centralPanel.setLayout(new GridBagLayout()); // Usando GridBagLayout para um layout mais flexível
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.fill = GridBagConstraints.HORIZONTAL;
-    gbc.insets = new Insets(20, 20, 20, 20); // Espaçamento entre os componentes
+        // Painel central para exibir os dados do transporte
+        JPanel centralPanel = new JPanel();
+        centralPanel.setLayout(new GridBagLayout()); // Usando GridBagLayout para um layout mais flexível
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
 
-    // Campo de texto para inserir o número do transporte
-    JLabel numeroLabel = new JLabel("Número do Transporte:");
-    numeroLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
-    JTextField numeroTextField = new JTextField(30); // Aumentando a largura do campo
-    numeroTextField.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
-    
-    gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
-    centralPanel.add(numeroLabel, gbc);
-    gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
-    centralPanel.add(numeroTextField, gbc);
+        // Campo de texto para inserir o número do transporte
+        JLabel numeroLabel = new JLabel("Número do Transporte:");
+        numeroLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
+        JTextField numeroTextField = new JTextField(30); // Aumentando a largura do campo
+        numeroTextField.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+        
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        centralPanel.add(numeroLabel, gbc);
+        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
+        centralPanel.add(numeroTextField, gbc);
 
-    // Área de texto para exibir os dados do transporte
-    JTextArea transporteInfoArea = new JTextArea(15, 60); // Aumentando a altura e a largura
-    transporteInfoArea.setEditable(false); // Não pode editar
-    transporteInfoArea.setFont(new Font("Arial", Font.PLAIN, 20)); // Fonte maior
-    transporteInfoArea.setBackground(new Color(255, 250, 240)); // Fundo claro
-    JScrollPane scrollPane = new JScrollPane(transporteInfoArea);
-    
-    gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
-    centralPanel.add(scrollPane, gbc);
+        // Área de texto para exibir os dados do transporte
+        JTextArea transporteInfoArea = new JTextArea(15, 60); // Aumentando a altura e a largura
+        transporteInfoArea.setEditable(false); // Não pode editar
+        transporteInfoArea.setFont(new Font("Arial", Font.PLAIN, 20)); // Fonte maior
+        transporteInfoArea.setBackground(new Color(255, 250, 240)); // Fundo claro
+        transporteInfoArea.setLineWrap(true);
+        transporteInfoArea.setWrapStyleWord(true);
+        JScrollPane scrollPane = new JScrollPane(transporteInfoArea);
+        scrollPane.setPreferredSize(new Dimension(600,150));
+        scrollPane.setMinimumSize(new Dimension(600, 150)); 
+        scrollPane.setMaximumSize(new Dimension(600, 300));
+        
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+        centralPanel.add(scrollPane, gbc);
 
-    // ComboBox para selecionar a nova situação
-    JLabel situacaoLabel = new JLabel("Nova Situação:");
-    situacaoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
-    String[] situacoes = {"PENDENTE", "ALOCADO", "TERMINADO", "CANCELADO"};
-    JComboBox<String> situacaoComboBox = new JComboBox<>(situacoes);
-    situacaoComboBox.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+        // ComboBox para selecionar a nova situação
+        JLabel situacaoLabel = new JLabel("Nova Situação:");
+        situacaoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
+        String[] situacoes = {"PENDENTE", "ALOCADO", "TERMINADO", "CANCELADO"};
+        JComboBox<String> situacaoComboBox = new JComboBox<>(situacoes);
+        situacaoComboBox.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
 
-    gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
-    centralPanel.add(situacaoLabel, gbc);
-    gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
-    centralPanel.add(situacaoComboBox, gbc);
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        centralPanel.add(situacaoLabel, gbc);
+        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
+        centralPanel.add(situacaoComboBox, gbc);
 
-    // Botões de ação
-    JPanel buttonPanel = new JPanel();
-    buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); // Distribuir botões de forma mais equilibrada
-    JButton buscarButton = new JButton("Buscar");
-    JButton alterarButton = new JButton("Alterar Situação");
-    JButton cancelarButton = new JButton("Cancelar");
+        // Botões de ação
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); // Distribuir botões de forma mais equilibrada
+        JButton buscarButton = new JButton("Buscar");
+        JButton alterarButton = new JButton("Alterar Situação");
+        JButton cancelarButton = new JButton("Cancelar");
 
-    // Definir fontes e cores dos botões
-    buscarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-    buscarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
-    buscarButton.setBackground(new Color(128, 128, 128));
-    buscarButton.setForeground(Color.WHITE);
-    
-    alterarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-    alterarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
-    alterarButton.setBackground(new Color(128, 128, 128));
-    alterarButton.setForeground(Color.WHITE);
-    
-    cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-    cancelarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
-    cancelarButton.setBackground(new Color(255, 0, 0)); // Vermelho
-    cancelarButton.setForeground(Color.WHITE);
+        // Definir fontes e cores dos botões
+        buscarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
+        buscarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
+        buscarButton.setBackground(new Color(128, 128, 128));
+        buscarButton.setForeground(Color.WHITE);
+        
+        alterarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
+        alterarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
+        alterarButton.setBackground(new Color(128, 128, 128));
+        alterarButton.setForeground(Color.WHITE);
+        
+        cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
+        cancelarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
+        cancelarButton.setBackground(new Color(255, 0, 0)); // Vermelho
+        cancelarButton.setForeground(Color.WHITE);
 
-    buttonPanel.add(buscarButton);
-    buttonPanel.add(alterarButton);
-    buttonPanel.add(cancelarButton);
+        buttonPanel.add(buscarButton);
+        buttonPanel.add(alterarButton);
+        buttonPanel.add(cancelarButton);
 
-    gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
-    centralPanel.add(buttonPanel, gbc);
+        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
+        centralPanel.add(buttonPanel, gbc);
 
-    alterarSituacaoButton.add(centralPanel, BorderLayout.CENTER);
+        alterarSituacaoButton.add(centralPanel, BorderLayout.CENTER);
 
-    buscarButton.addActionListener(e -> {
-        Transporte tr = null;
+        buscarButton.addActionListener(e -> {
+            Transporte tr = null;
 
-        try {
-            tr = transportes.get(0);
-        } catch (IndexOutOfBoundsException ex) {
-            transporteInfoArea.setText("Erro: Nenhum transporte disponível.");
-            return;
-        }
-
-        int numero;
-        String numeroStr = numeroTextField.getText().trim();
-
-        try {
-            numero = Integer.parseInt(numeroStr);
-        } catch (NumberFormatException ex){
-            transporteInfoArea.setText("Erro: O número do transporte deve ser um número válido.\n");
-            return;
-        }
-
-        if (numeroStr.isEmpty()) {
-            JOptionPane.showMessageDialog(alterarSituacaoButton, "Por favor, insira o número do transporte.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        for (Transporte t : transportes){
-            if (t.getNumero() == numero){
-                tr = t;
-                transporteInfoArea.setText(t.toString());
+            try {
+                tr = transportes.get(0);
+            } catch (IndexOutOfBoundsException ex) {
+                transporteInfoArea.setText("Erro: Nenhum transporte disponível.");
+                return;
             }
-        }
 
-        if (tr == null){
-            transporteInfoArea.setText("Erro: Não existe um transporte com esse número.");
-        }
+            int numero;
+            String numeroStr = numeroTextField.getText().trim();
 
-        ct.carregarTransporte(tr);
-    });
+            try {
+                numero = Integer.parseInt(numeroStr);
+            } catch (NumberFormatException ex){
+                transporteInfoArea.setText("Erro: O número do transporte deve ser um número válido.\n");
+                return;
+            }
 
-    alterarButton.addActionListener(a -> {
-        String situacaoSelecionada = (String) situacaoComboBox.getSelectedItem();
-        Estado situacao = Estado.valueOf(situacaoSelecionada);
-        if (transporteCarregado.getSituacao() != Estado.PENDENTE && situacao == Estado.PENDENTE){
-            transporteInfoArea.setText("Erro: Se um transporte não for mais pendente, ele não pode voltar a ser pendente.");
-        }
-        if (transporteCarregado.getSituacao() == Estado.TERMINADO ||
-            transporteCarregado.getSituacao() == Estado.CANCELADO){
-            transporteInfoArea.setText("Erro: Se um transporte estiver TERMINADO OU CANCELADO, sua situação não pode mais ser alterada.");
-            return;
-        }
+            if (numeroStr.isEmpty()) {
+                JOptionPane.showMessageDialog(alterarSituacaoButton, "Por favor, insira o número do transporte.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-        if (situacao == transporteCarregado.getSituacao()){
-            transporteInfoArea.setText("Erro: A nova situação deve ser DIFERENTE da situação atual.");
-        } else {
-            transporteCarregado.setSituacao(situacao);
-            transporteInfoArea.setText("Situação alterada com sucesso!");
-        }
-    });
+            for (Transporte t : transportes){
+                if (t.getNumero() == numero){
+                    tr = t;
+                    transporteInfoArea.setText(t.toString());
+                }
+            }
 
-    cancelarButton.addActionListener(e -> {alterarSituacaoButton.dispose();});
+            if (tr == null){
+                transporteInfoArea.setText("Erro: Não existe um transporte com esse número.");
+            }
 
-    alterarSituacaoButton.setVisible(true);
+            ct.carregarTransporte(tr);
+        });
+
+        alterarButton.addActionListener(a -> {
+            String situacaoSelecionada = (String) situacaoComboBox.getSelectedItem();
+            Estado situacao = Estado.valueOf(situacaoSelecionada);
+            if (transporteCarregado.getSituacao() != Estado.PENDENTE && situacao == Estado.PENDENTE){
+                transporteInfoArea.setText("Erro: Se um transporte não for mais pendente, ele não pode voltar a ser pendente.");
+            }
+            if (transporteCarregado.getSituacao() == Estado.TERMINADO ||
+                transporteCarregado.getSituacao() == Estado.CANCELADO){
+                transporteInfoArea.setText("Erro: Se um transporte estiver TERMINADO OU CANCELADO, sua situação não pode mais ser alterada.");
+                return;
+            }
+
+            if (situacao == transporteCarregado.getSituacao()){
+                transporteInfoArea.setText("Erro: A nova situação deve ser DIFERENTE da situação atual.");
+            } else {
+                transporteCarregado.setSituacao(situacao);
+                transporteInfoArea.setText("Situação alterada com sucesso!");
+            }
+        });
+
+        cancelarButton.addActionListener(e -> {alterarSituacaoButton.dispose();});
+
+        alterarSituacaoButton.setVisible(true);
     }
 
 
