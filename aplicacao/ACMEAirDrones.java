@@ -1082,7 +1082,7 @@ public class ACMEAirDrones {
                                     (d1 instanceof DroneCargaInanimada && t instanceof TransporteCargaInanimada)){
                                     transportesFinalizados.put(d1, t);
                                     t.setSituacao(Estado.ALOCADO);
-                                    mensagemArea.append("\nAtribuindo o Drone - >"+d1.toString()+" ao Transporte -> "+t.toString()+"\n");
+                                    mensagemArea.append("\nAtribuindo o Drone - > ("+d1.toString()+") ao Transporte -> ("+t.toString()+")\n");
                                     droneAtribuido = true;
                                 }
                             } 
@@ -1225,7 +1225,19 @@ public class ACMEAirDrones {
         // Adiciona o botão ao painel de botões
         buttonPanel.add(fecharButton);
         mostrarTransportesFrame.add(buttonPanel, BorderLayout.SOUTH);
+
+        StringBuilder todosTransportes = new StringBuilder("-- TRANSPORTES: --\n");
+        todosTransportes.append("\nTRANSPORTES PENDENTES:\n");
+        for (Transporte t : transportesPendentes){
+            todosTransportes.append(t.toString() + "\n");
+        }
+        todosTransportes.append("\nTRANSPORTES FINALIZADOS:\n");
+        transportesFinalizados.forEach((Drone d, Transporte t) -> {
+            todosTransportes.append("\nTransporte -> ("+t.toString() + "),  Drone -> (" + d.toString()+"), Custo Final = "+t.calculaCusto(d)+"\n");
+        });
     
+        transportesArea.append(todosTransportes.toString());
+
         // Ação para o botão "Fechar" - Fecha a janela ao ser clicado
         fecharButton.addActionListener(e -> mostrarTransportesFrame.dispose());
     

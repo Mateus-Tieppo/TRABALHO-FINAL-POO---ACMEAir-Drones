@@ -25,6 +25,7 @@ public class DroneCargaViva extends DroneCarga {
         } else {
             custoVariado += 10;
         }
-        return custoFixo + custoVariado;
+        double custoKM = custoFixo + custoVariado;
+        return custoKM;
     }
 }

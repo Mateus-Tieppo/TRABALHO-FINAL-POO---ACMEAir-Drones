@@ -20,6 +20,7 @@ public class DroneCargaInanimada extends DroneCarga {
     public double calculaCustoKM() {
         double custoFixo = getCustoFixo();
         double custoVariado = protecao ? 10 : 5;
-        return custoFixo + custoVariado;
+        double custoKM = custoFixo + custoVariado;
+        return custoKM;
     }
 }

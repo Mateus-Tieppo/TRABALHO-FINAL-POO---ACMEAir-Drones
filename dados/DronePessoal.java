@@ -20,6 +20,7 @@ public class DronePessoal extends Drone {
     public double calculaCustoKM(){
         double custoFixo = getCustoFixo();
         double custoVariado = qtdMaxPessoas * 2;
-        return custoFixo + custoVariado;
+        double custoKM = custoFixo + custoVariado;
+        return custoKM;
     }
 }

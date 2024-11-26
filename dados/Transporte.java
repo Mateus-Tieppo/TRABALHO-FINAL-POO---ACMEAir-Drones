@@ -73,6 +73,13 @@ public abstract class Transporte {
     public abstract double calculaCusto(Drone drone);
 
     private double calcularDistancia() {
-        return Math.sqrt(Math.pow(latitudeDestino - latitudeOrigem, 2) + Math.pow(longitudeDestino - longitudeOrigem, 2));
+        double theta = longitudeOrigem - longitudeDestino;
+        double distance = 60 * 1.1515 * (180/Math.PI) * Math.acos(
+            Math.sin(latitudeOrigem * (Math.PI/180)) * Math.sin(latitudeDestino * (Math.PI/180)) +
+            Math.cos(latitudeOrigem * (Math.PI/180)) * Math.cos(latitudeDestino * (Math.PI/180)) * Math.cos(theta *
+            (Math.PI/180))
+        );
+        double resultado = distance * 1.609344;
+        return resultado;
     }
 }

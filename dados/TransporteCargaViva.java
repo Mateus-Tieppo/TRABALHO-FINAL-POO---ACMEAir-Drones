@@ -25,7 +25,8 @@ public class TransporteCargaViva extends Transporte {
         if (temperaturaMaxima - temperaturaMinima > 10) {
             acrescimos += 1000;
         }
-        return (custoDrone * getDistancia()) + acrescimos;
+        double resultado = (custoDrone * getDistancia()) + acrescimos;
+        return resultado;
     }
 
     public String toString(){

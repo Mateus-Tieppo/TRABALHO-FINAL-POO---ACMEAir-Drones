@@ -16,7 +16,8 @@ public class TransportePessoal extends Transporte {
     public double calculaCusto(Drone drone) {
         double custoDrone = drone.calculaCustoKM();
         double acrescimos = qtdPessoas * 10;
-        return (custoDrone * getDistancia()) + acrescimos;
+        double resultado = (custoDrone * getDistancia()) + acrescimos;
+        return resultado;
     }
 
     public String toString(){

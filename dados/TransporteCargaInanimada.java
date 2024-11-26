@@ -19,7 +19,8 @@ public class TransporteCargaInanimada extends Transporte {
         if (cargaPerigosa) {
             acrescimos += 500;
         }
-        return (custoDrone * getDistancia()) + acrescimos;
+        double resultado = (custoDrone * getDistancia()) + acrescimos;
+        return resultado;
     }
 
     public String toString(){
