@@ -540,7 +540,7 @@ public class ACMEAirDrones {
                 mensagemArea.setText(listaDrones.toString());
             }
             } catch (Exception ex) {
-            mensagemArea.setText("Erro ao exibir os dados dos drones: " + ex.getMessage() + "\n");
+                mensagemArea.setText("Erro ao exibir os dados dos drones: " + ex.getMessage() + "\n");
             }
         }); 
         
@@ -993,7 +993,7 @@ public class ACMEAirDrones {
         });
 
         botaoDados.addActionListener(e -> {
-            StringBuilder dados = new StringBuilder();
+            StringBuilder dados = new StringBuilder("Transportes cadastrados:\n");
             for (Transporte t : transportesPendentes) {
                 dados.append(t).append("\n");
             }
@@ -1067,7 +1067,7 @@ public class ACMEAirDrones {
         // Ação para o botão "Processar Transportes"
         processarButton.addActionListener(e -> {
             if (todosProcessados) {
-                mensagemArea.setText("Não há mais transportes pendentes para serem processados");
+                mensagemArea.append("Não há mais transportes pendentes para serem processados.\n");
             } else {
                 while (!transportesPendentes.isEmpty()) {
                     Transporte t = transportesPendentes.poll();
@@ -1075,28 +1075,32 @@ public class ACMEAirDrones {
     
                     if (droneAssociado == null) {
                         if (!dronesDisponiveis.isEmpty()){
-                            dronesDisponiveis.forEach(d1 -> {
-                            if ((d1 instanceof DronePessoal && t instanceof TransportePessoal) ||
-                                (d1 instanceof DroneCargaViva && t instanceof TransporteCargaViva) ||
-                                (d1 instanceof DroneCargaInanimada && t instanceof TransporteCargaInanimada)){
-                                transportesFinalizados.put(d1, t);
-                                t.setSituacao(Estado.ALOCADO);
-                                mensagemArea.append("\nAtribuindo o Drone - >"+d1.toString()+" ao Transporte -> "+t.toString());
-                            } else {
-                                mensagemArea.setText("Erro: Nenhum drone compatível com os transportes pendentes.");
+                            boolean droneAtribuido = false;
+                            for (Drone d1 : dronesDisponiveis){
+                                if ((d1 instanceof DronePessoal && t instanceof TransportePessoal) ||
+                                    (d1 instanceof DroneCargaViva && t instanceof TransporteCargaViva) ||
+                                    (d1 instanceof DroneCargaInanimada && t instanceof TransporteCargaInanimada)){
+                                    transportesFinalizados.put(d1, t);
+                                    t.setSituacao(Estado.ALOCADO);
+                                    mensagemArea.append("\nAtribuindo o Drone - >"+d1.toString()+" ao Transporte -> "+t.toString()+"\n");
+                                    droneAtribuido = true;
+                                }
+                            } 
+                            if (!droneAtribuido){
+                                mensagemArea.append("Erro: Nenhum drone compatível com os transportes pendentes.\n");
                                 transportesPendentes.add(t);
                             }
-                            });
                         } else {
-                            mensagemArea.setText("Não existem drones disponíveis!");
+                            mensagemArea.append("Não existem drones disponíveis!\n");
                             transportesPendentes.add(t);
                         }
                     } else {
-                        mensagemArea.setText("Transporte "+t+" já tem um drone associado!");
+                        mensagemArea.append("Transporte "+t+" já tem um drone associado!\n");
                     }
                 }
                 if (transportesPendentes.isEmpty()) {
                     todosProcessados = true;
+                    mensagemArea.append("Todos os transportes foram processados.\n");
                 }
             }
         });
@@ -1292,7 +1296,7 @@ public class ACMEAirDrones {
         // ComboBox para selecionar a nova situação
         JLabel situacaoLabel = new JLabel("Nova Situação:");
         situacaoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
-        String[] situacoes = {"PENDENTE", "ALOCADO", "TERMINADO", "CANCELADO"};
+        String[] situacoes = {"PENDENTE", "TERMINADO", "CANCELADO"};
         JComboBox<String> situacaoComboBox = new JComboBox<>(situacoes);
         situacaoComboBox.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
 
@@ -1377,7 +1381,9 @@ public class ACMEAirDrones {
             Estado situacao = Estado.valueOf(situacaoSelecionada);
             if (transporteCarregado.getSituacao() != Estado.PENDENTE && situacao == Estado.PENDENTE){
                 transporteInfoArea.setText("Erro: Se um transporte não for mais pendente, ele não pode voltar a ser pendente.");
+                return;
             }
+
             if (transporteCarregado.getSituacao() == Estado.TERMINADO ||
                 transporteCarregado.getSituacao() == Estado.CANCELADO){
                 transporteInfoArea.setText("Erro: Se um transporte estiver TERMINADO OU CANCELADO, sua situação não pode mais ser alterada.");
