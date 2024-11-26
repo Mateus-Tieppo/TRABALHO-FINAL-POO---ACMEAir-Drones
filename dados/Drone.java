@@ -2,8 +2,8 @@ package dados;
 
 public abstract class Drone {
     private int codigo;
-    private double autonomia;
     private double custoFixo;
+    private double autonomia;
 
     public Drone(int codigo, double custoFixo, double autonomia) {
         this.codigo = codigo;

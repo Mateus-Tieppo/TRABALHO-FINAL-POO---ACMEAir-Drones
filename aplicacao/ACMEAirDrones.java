@@ -1264,7 +1264,7 @@ public class ACMEAirDrones {
 
     // ComboBox para selecionar a nova situação
     JLabel situacaoLabel = new JLabel("Nova Situação:");
-    situacaoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
+    situacaoLabel.setFont(new Font("Arial", Font.PLAIN, )); // Fonte maior
     String[] situacoes = {"PENDENTE", "ALOCADO", "TERMINADO", "CANCELADO"};
     JComboBox<String> situacaoComboBox = new JComboBox<>(situacoes);
     situacaoComboBox.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
