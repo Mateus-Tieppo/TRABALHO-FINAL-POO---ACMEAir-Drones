@@ -13,13 +13,20 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-
+import java.io.BufferedWriter;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ACMEAirDrones {
 
@@ -1192,7 +1199,6 @@ public class ACMEAirDrones {
     }
 
     public void mostrarRelatorioGeral() {
-        /*
         // Criando a janela principal para mostrar o relatório
         JFrame mostrarRelatorioGeralFrame = new JFrame("Relatório Geral");
         mostrarRelatorioGeralFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Janela maximizada
@@ -1218,11 +1224,16 @@ public class ACMEAirDrones {
    
         // Relatorio Geral
         StringBuilder relatorioGeral = new StringBuilder();
-        dronesCadastrados.forEach((chave, valor) -> {
-            relatorioGeral.append(chave).append(" - Tipo: ").append(valor).append("\n");
-        });
-        /* Esperando ArrayList de transportes do Fred */
-        /*
+        
+        relatorioGeral.append("--- DRONES: ---\n");
+        for (Drone d : dronesCadastrados) {
+            relatorioGeral.append(d.toString() + "\n");
+        }
+
+        relatorioGeral.append("\n-- TRANSPORTES: --\n");
+        for (Transporte t : transportes) {
+            relatorioGeral.append(t.toString() + "\n");
+        }
 
         relatorioArea.setText(relatorioGeral.toString());
 
@@ -1250,7 +1261,7 @@ public class ACMEAirDrones {
     
         // Tornando a janela visível
         mostrarRelatorioGeralFrame.setVisible(true);
-        */
+    
     }
 
     public void mostrarTransportes() {
@@ -1462,12 +1473,59 @@ public class ACMEAirDrones {
 
 
     public void lerDadosSimulacao() {
+
     }
 
     public void salvarDados() {
     }
 
     public void carregarDados() {
+        /* PARA TIEPPOLA:
+         * 
+         * Faz a telinha, com um campo para o nome do arquivo (sem extensão), 
+         * e um campo seletor para o tipo de classe (DronePessoal, DroneCargaViva, DroneCargaInanimada, TransportePessoal...)
+         * 
+         * ao clicar no botão finalizar, ele chama a função auxiliar "carregarDadosAux(String caminho, int tipo)"
+         */
+    }
+
+    public void carregarDadosAux(String caminho, int tipo) {
+        Path path = Paths.get(caminho + ".csv"); 
+        try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())) {
+            String line = null;
+            while((line = reader.readLine()) != null) {
+                String[] data = line.split(";");
+
+                try {
+                    if (tipo == 1) {
+                        Drone aux = new DronePessoal(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Integer.parseInt(data[3]));
+                        dronesCadastrados.add(aux);
+                    } else if (tipo == 2) {
+                        Drone aux = new DroneCargaViva(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Boolean.parseBoolean(data[4]));
+                        dronesCadastrados.add(aux);
+                    } else if (tipo == 3) {
+                        Drone aux = new DroneCargaInanimada(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Boolean.parseBoolean(data[4]));
+                        dronesCadastrados.add(aux);
+                    } else if (tipo == 4) {
+                        Transporte aux = new TransportePessoal(Integer.parseInt(data[0]), data[1], data[2], Double.parseDouble(data[3]), Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Integer.parseInt(data[8]));
+                        transportesPendentes.add(aux);
+                        transportes.add(aux);
+                    } else if (tipo == 5) {
+                        Transporte aux = new TransporteCargaViva(Integer.parseInt(data[0]), data[1], data[2], Double.parseDouble(data[3]), Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Double.parseDouble(data[8]), Double.parseDouble(data[9]));
+                        transportesPendentes.add(aux);
+                        transportes.add(aux);
+                    } else if (tipo == 6) {
+                        Transporte aux = new TransporteCargaInanimada(Integer.parseInt(data[0]), data[1], data[2], Double.parseDouble(data[3]), Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Boolean.parseBoolean(data[8]));
+                        transportesPendentes.add(aux);
+                        transportes.add(aux);
+                    }
+                } catch (InputMismatchException e) {
+                    System.err.format("Erro: %s%n", e);
+                }
+            }
+        } catch (IOException e) {
+            System.err.format("Erro: %s%n", e);
+        }
     }
 
     public void finalizarSistema() {
