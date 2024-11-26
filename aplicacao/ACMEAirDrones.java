@@ -155,12 +155,12 @@ public class ACMEAirDrones {
         tipoDroneFrame.setLayout(new BorderLayout(20, 10));
     
         
-        tipoDroneFrame.setSize(800, 600);
+        tipoDroneFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         tipoDroneFrame.setLocationRelativeTo(null);
     
         
         JLabel tituloCadastro = new JLabel("ACME - Cadastro de Drones", JLabel.CENTER);
-        tituloCadastro.setFont(new Font("Arial", Font.BOLD, 50));
+        tituloCadastro.setFont(new Font("Arial", Font.BOLD, 70));
         tituloCadastro.setForeground(new Color(255, 0, 0));
         tipoDroneFrame.add(tituloCadastro, BorderLayout.NORTH);
     
@@ -332,12 +332,17 @@ public class ACMEAirDrones {
         dadosButton.setFont(new Font("Arial", Font.BOLD, 25));
         terminarButton.setFont(new Font("Arial", Font.BOLD, 25));
     
-        salvarButton.setBackground(new Color(60, 179, 113)); // Verde
-        salvarButton.setForeground(Color.WHITE);
-        limparButton.setBackground(new Color(255, 165, 0)); // Laranja
-        limparButton.setForeground(Color.WHITE);
-        dadosButton.setBackground(new Color(100, 149, 237)); // Azul claro
-        dadosButton.setForeground(Color.WHITE);
+        // Botão Salvar - Cinza Claro
+        salvarButton.setBackground(new Color(128, 128, 128)); // Cinza Claro
+        salvarButton.setForeground(Color.WHITE); // Texto Branco
+
+        // Botão Limpar - Cinza Médio
+        limparButton.setBackground(new Color(128, 128, 128)); // Cinza Médio
+        limparButton.setForeground(Color.WHITE); // Texto Branco
+
+        // Botão Dados - Cinza Escuro
+        dadosButton.setBackground(new Color(128, 128, 128)); // Cinza Escuro
+        dadosButton.setForeground(Color.WHITE); // Texto Branco
     
         // Estilizar botão "Terminar"
         terminarButton.setBackground(Color.RED);
@@ -449,25 +454,74 @@ public class ACMEAirDrones {
     }  
     
     private void telaCadastroTransporte() {
-        JFrame tipoTransporte = new JFrame("Tipo de Transporte");
-        tipoTransporte.setSize(300, 300);
-        tipoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        tipoTransporte.setLayout(new BorderLayout(10, 10));
-    
+        JFrame tipoTransporte = new JFrame("Escolha o Tipo de Transporte");
+        
+        // Título com estilo personalizado
+        JLabel tituloLabel = new JLabel("ACME - Escolha o Tipo de Transporte", JLabel.CENTER);
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 70)); // Aumenta o tamanho da fonte para dar destaque
+        tituloLabel.setForeground(new Color(255,0,0)); 
+        tituloLabel.setBackground(new Color(240, 240, 240)); // Cor de fundo suave
+        tituloLabel.setOpaque(true); // Torna o fundo visível
+        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0)); // Espaçamento no topo e na parte inferior
+
+        // Configura a janela para abrir em tela cheia
+        tipoTransporte.setExtendedState(JFrame.MAXIMIZED_BOTH); // Tela cheia
+        tipoTransporte.setUndecorated(false); // Barra de título visível
+        tipoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha ao clicar no "X"
+        tipoTransporte.setLayout(new BorderLayout(10, 10)); // Layout com margem
+
+        // Adicionando o título à parte superior da janela
+        tipoTransporte.add(tituloLabel, BorderLayout.NORTH);
+
+        // Painel central com grid para os botões
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 10, 10)); // Grid de 3 linhas com espaçamento de 10px entre os botões
+        buttonPanel.setBackground(Color.WHITE); // Cor de fundo para o painel de botões
+
+        // Criando os botões com estilo moderno
         JButton pessoalButton = new JButton("Transporte Pessoal");
         JButton cargaVivaButton = new JButton("Transporte de Carga Viva");
         JButton cargaInanimadaButton = new JButton("Transporte de Carga Inanimada");
-    
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        // Estilo para os botões
+        Font buttonFont = new Font("Arial", Font.BOLD, 30); // Fonte para os botões
+        pessoalButton.setFont(buttonFont);
+        cargaVivaButton.setFont(buttonFont);
+        cargaInanimadaButton.setFont(buttonFont);
+
+        // Cores de fundo dos botões
+        pessoalButton.setBackground(new Color(76, 175, 80)); // Verde
+        cargaVivaButton.setBackground(new Color(33, 150, 243)); // Azul
+        cargaInanimadaButton.setBackground(new Color(244, 67, 54)); // Vermelho
+
+        // Cores de texto dos botões
+        pessoalButton.setForeground(Color.WHITE);
+        cargaVivaButton.setForeground(Color.WHITE);
+        cargaInanimadaButton.setForeground(Color.WHITE);
+
+        // Efeito de foco nos botões
+        pessoalButton.setFocusPainted(false);
+        cargaVivaButton.setFocusPainted(false);
+        cargaInanimadaButton.setFocusPainted(false);
+
+        // Adicionando os botões ao painel
         buttonPanel.add(pessoalButton);
         buttonPanel.add(cargaVivaButton);
         buttonPanel.add(cargaInanimadaButton);
+
+        // Adicionando o painel com os botões à janela
         tipoTransporte.add(buttonPanel, BorderLayout.CENTER);
-    
+
+        // Personalizar os botões usando o método customizeButton
+        customizeButton(pessoalButton);
+        customizeButton(cargaVivaButton);
+        customizeButton(cargaInanimadaButton);
+
+        // Ações dos botões
         pessoalButton.addActionListener(e -> cadastrarTransporte("Pessoal"));
         cargaVivaButton.addActionListener(e -> cadastrarTransporte("Carga Viva"));
         cargaInanimadaButton.addActionListener(e -> cadastrarTransporte("Carga Inanimada"));
-    
+
+        // Tornar a janela visível
         tipoTransporte.setVisible(true);
     }
 
@@ -483,9 +537,20 @@ public class ACMEAirDrones {
 
     public void cadastrarTransporte(String tipoTransporte) {
         JFrame novoTransporte = new JFrame("Cadastrar Novo Transporte");
-        novoTransporte.setSize(800, 600);
-        novoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        novoTransporte.setLayout(new BorderLayout(10, 10));
+        novoTransporte.setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximiza a janela
+        novoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha a janela quando clicado
+
+        // Criar o painel para o título
+        JPanel tituloPanel = new JPanel();
+        tituloPanel.setLayout(new BorderLayout()); // Usando BorderLayout para centralizar o título
+
+        // Criando o JLabel com o texto e alinhamento
+        JLabel titulo = new JLabel("ACME - Cadastrar Novo Transporte", JLabel.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 70)); // Define o tamanho e estilo da fonte
+        titulo.setForeground(Color.RED); // Cor do texto (Vermelho)
+
+        // Adiciona o painel de título ao JFrame
+        novoTransporte.add(tituloPanel, BorderLayout.NORTH);
     
         JPanel inputPanel = new JPanel(new GridBagLayout());
         GridBagConstraints grid = new GridBagConstraints();
@@ -512,50 +577,81 @@ public class ACMEAirDrones {
         JButton botaoDados = new JButton("Mostrar Dados");
         JButton botaoSair = new JButton("Sair");
         JButton botaoCampos = new JButton("Exibir Campos Específicos");
+
+        // Estilizar botões
+        botaoConfirma.setFont(new Font("Arial", Font.BOLD, 25));
+        botaoConfirma.setBackground(new Color(128, 128, 128));
+        botaoConfirma.setForeground(Color.WHITE);
+
+        botaoLimpar.setFont(new Font("Arial", Font.BOLD, 25));
+        botaoLimpar.setBackground(new Color(128, 128, 128));
+        botaoLimpar.setForeground(Color.WHITE);
+
+        botaoDados.setFont(new Font("Arial", Font.BOLD, 25));
+        botaoDados.setBackground(new Color(128, 128, 128)); 
+        botaoDados.setForeground(Color.WHITE);
+
+        botaoSair.setFont(new Font("Arial", Font.BOLD, 25));
+        botaoSair.setBackground(Color.RED); // Vermelho
+        botaoSair.setForeground(Color.WHITE);
+        botaoSair.setOpaque(true);
+        botaoSair.setBorderPainted(false);
+
+        // Botão Campos Específicos
+        botaoCampos.setFont(new Font("Arial", Font.BOLD, 25));
+        botaoCampos.setBackground(new Color(128, 128, 128));
+        botaoCampos.setForeground(Color.WHITE);
+
+        // Alinhamento dos Campos à Esquerda e Mensagens à Direita
+        grid.anchor = GridBagConstraints.WEST;  // Alinhar à esquerda
     
+        // Adicionando campos de entrada à esquerda
         grid.gridx = 0; grid.gridy = 0;
         inputPanel.add(new JLabel("Nº Transporte:"), grid);
         grid.gridx = 1; grid.gridy = 0;
         inputPanel.add(numeroField, grid);
-    
+
         grid.gridx = 0; grid.gridy = 1;
         inputPanel.add(new JLabel("Nome do Cliente:"), grid);
         grid.gridx = 1; grid.gridy = 1;
         inputPanel.add(nomeClienteField, grid);
-    
+
         grid.gridx = 0; grid.gridy = 2;
         inputPanel.add(new JLabel("Descrição do Transporte:"), grid);
         grid.gridx = 1; grid.gridy = 2;
         inputPanel.add(descricaoField, grid);
-    
+
         grid.gridx = 0; grid.gridy = 3;
         inputPanel.add(new JLabel("Peso:"), grid);
         grid.gridx = 1; grid.gridy = 3;
         inputPanel.add(pesoField, grid);
-    
+
         grid.gridx = 0; grid.gridy = 4;
         inputPanel.add(new JLabel("Latitude de Origem:"), grid);
         grid.gridx = 1; grid.gridy = 4;
         inputPanel.add(latOrigemField, grid);
-    
+
         grid.gridx = 0; grid.gridy = 5;
         inputPanel.add(new JLabel("Latitude de Destino:"), grid);
         grid.gridx = 1; grid.gridy = 5;
         inputPanel.add(latDestinoField, grid);
-    
+
         grid.gridx = 0; grid.gridy = 6;
         inputPanel.add(new JLabel("Longitude de Origem:"), grid);
         grid.gridx = 1; grid.gridy = 6;
         inputPanel.add(longOrigemField, grid);
-    
+
         grid.gridx = 0; grid.gridy = 7;
         inputPanel.add(new JLabel("Longitude de Destino:"), grid);
         grid.gridx = 1; grid.gridy = 7;
         inputPanel.add(longDestinoField, grid);
-    
-        novoTransporte.add(inputPanel, BorderLayout.NORTH);
+
+        // Colocando o painel de entrada no canto esquerdo
+        novoTransporte.add(inputPanel, BorderLayout.WEST);
+        // Colocando o painel de mensagens no centro
         novoTransporte.add(scrollPane, BorderLayout.CENTER);
     
+        // Organizando os botões na parte inferior
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(botaoConfirma);
         buttonPanel.add(botaoLimpar);
@@ -904,7 +1000,7 @@ public class ACMEAirDrones {
         processarTransportesPendentes.setLayout(new BorderLayout(10, 10));
 
         JLabel tituloProcessarTransportesPendentes = new JLabel("Processar Transportes Pendentes", JLabel.CENTER);
-        tituloProcessarTransportesPendentes.setFont(new Font("Arial", Font.BOLD, 50));
+        tituloProcessarTransportesPendentes.setFont(new Font("Arial", Font.BOLD, 70));
         tituloProcessarTransportesPendentes.setForeground(new Color(255, 0, 0));
         tituloProcessarTransportesPendentes.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
         processarTransportesPendentes.add(tituloProcessarTransportesPendentes, BorderLayout.NORTH);
@@ -938,7 +1034,7 @@ public class ACMEAirDrones {
         JButton terminarButton = new JButton("Terminar");
 
         processarButton.setFont(new Font("Arial", Font.BOLD, 25));
-        processarButton.setBackground(new Color(60, 179, 113)); // Verde
+        processarButton.setBackground(new Color(128, 128, 128)); 
         processarButton.setForeground(Color.WHITE);
 
         terminarButton.setFont(new Font("Arial", Font.BOLD, 25));
@@ -1013,9 +1109,9 @@ public class ACMEAirDrones {
         mostrarRelatorioGeralFrame.setLayout(new BorderLayout(10, 10)); // Layout com espaçamento
     
         // Título do relatório
-        JLabel tituloRelatorioGeral = new JLabel("Relatório Geral", JLabel.CENTER);
-        tituloRelatorioGeral.setFont(new Font("Arial", Font.BOLD, 50));
-        tituloRelatorioGeral.setForeground(new Color(0, 0, 255)); // Cor azul para o título
+        JLabel tituloRelatorioGeral = new JLabel("ACME - Relatório Geral", JLabel.CENTER);
+        tituloRelatorioGeral.setFont(new Font("Arial", Font.BOLD, 70));
+        tituloRelatorioGeral.setForeground(new Color(255, 0, 0)); 
         tituloRelatorioGeral.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
         mostrarRelatorioGeralFrame.add(tituloRelatorioGeral, BorderLayout.NORTH);
     
@@ -1072,9 +1168,9 @@ public class ACMEAirDrones {
         mostrarTransportesFrame.setLayout(new BorderLayout(10, 10)); // Layout com espaçamento
     
         // Título da janela
-        JLabel tituloTransportes = new JLabel("Relatório de Transportes e Drones", JLabel.CENTER);
-        tituloTransportes.setFont(new Font("Arial", Font.BOLD, 50));
-        tituloTransportes.setForeground(new Color(0, 0, 255)); // Cor azul para o título
+        JLabel tituloTransportes = new JLabel(" ACME - Relatório de Transportes e Drones", JLabel.CENTER);
+        tituloTransportes.setFont(new Font("Arial", Font.BOLD, 70));
+        tituloTransportes.setForeground(new Color(255, 0, 0)); 
         tituloTransportes.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
         mostrarTransportesFrame.add(tituloTransportes, BorderLayout.NORTH);
     
@@ -1124,7 +1220,7 @@ public class ACMEAirDrones {
     public void alterarSituacaoTransporte() {
         // Criando a janela para alterar a situação do transporte
         JFrame alterarSituacaoButton = new JFrame("Alterar Situação do Transporte");
-        alterarSituacaoButton.setSize(600, 400); // Definindo o tamanho da janela
+        alterarSituacaoButton.setExtendedState(JFrame.MAXIMIZED_BOTH);
         alterarSituacaoButton.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         alterarSituacaoButton.setLayout(new BorderLayout(10, 10));
     
@@ -1256,7 +1352,6 @@ public class ACMEAirDrones {
     }
 
     public void finalizarSistema() {
-        // Confirmar se o usuário realmente quer finalizar
         int resposta = JOptionPane.showConfirmDialog(
             null, 
             "Você tem certeza que deseja finalizar o sistema?", 
@@ -1264,12 +1359,8 @@ public class ACMEAirDrones {
             JOptionPane.YES_NO_OPTION, 
             JOptionPane.QUESTION_MESSAGE
         );
-        
-        // Se o usuário clicar em "Sim"
         if (resposta == JOptionPane.YES_OPTION) {
-            // Fechar a aplicação
-            System.exit(0); // Finaliza a aplicação
+            System.exit(0); 
         }
-        // Caso o usuário clique em "Não", não faz nada
     }
 }
