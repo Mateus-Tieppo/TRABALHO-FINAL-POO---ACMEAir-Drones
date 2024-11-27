@@ -179,7 +179,7 @@ public class ACMEAirDrones {
     
         
         JLabel tituloCadastro = new JLabel("ACME - Cadastro de Drones", JLabel.CENTER);
-        tituloCadastro.setFont(new Font("Arial", Font.BOLD, 70));
+        tituloCadastro.setFont(new Font("Arial", Font.BOLD, 60));
         tituloCadastro.setForeground(new Color(255, 0, 0));
         tipoDroneFrame.add(tituloCadastro, BorderLayout.NORTH);
     
@@ -558,10 +558,11 @@ public class ACMEAirDrones {
         tipoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         tipoTransporte.setLayout(new BorderLayout(20, 10));
         tipoTransporte.setSize(900,600);
+        tipoTransporte.setLocationRelativeTo(null);
         
         // Título com estilo personalizado
         JLabel tituloLabel = new JLabel("ACME - Escolha o Tipo de Transporte", JLabel.CENTER);
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 70)); // Aumenta o tamanho da fonte para dar destaque
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 45)); // Aumenta o tamanho da fonte para dar destaque
         tituloLabel.setForeground(new Color(255,0,0)); 
         tipoTransporte.add(tituloLabel, BorderLayout.NORTH);
 
