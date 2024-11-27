@@ -10,9 +10,6 @@ import dados.TransporteCargaInanimada;
 import dados.TransporteCargaViva;
 import dados.TransportePessoal;
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -87,7 +84,6 @@ public class ACMEAirDrones {
         JPanel tituloContainer = new JPanel(new FlowLayout(FlowLayout.CENTER));
         tituloContainer.add(tituloPanel);
     
-        // Criação dos botões
         JButton cadastrarDroneButton = new JButton("Cadastrar Novo Drone");
         JButton cadastrarTransporteButton = new JButton("Cadastrar Novo Transporte");
         JButton processarTransportesButton = new JButton("Processar Transportes Pendentes");
@@ -99,7 +95,6 @@ public class ACMEAirDrones {
         JButton carregarDadosButton = new JButton("Carregar Dados");
         JButton finalizarButton = new JButton("Finalizar Sistema");
 
-        // Personalizando os botões com o método 'customizeButton'
         customizeButton(cadastrarDroneButton);
         customizeButton(cadastrarTransporteButton);
         customizeButton(processarTransportesButton);
@@ -111,7 +106,6 @@ public class ACMEAirDrones {
         customizeButton(carregarDadosButton);
         customizeButton(finalizarButton);
 
-        // Adicionar ações aos botões
         cadastrarDroneButton.addActionListener(e -> abrirTelaCadastroDrone());
         cadastrarTransporteButton.addActionListener(e -> telaCadastroTransporte());
         processarTransportesButton.addActionListener(e -> processarTransportesPendentes());
@@ -123,11 +117,9 @@ public class ACMEAirDrones {
         carregarDadosButton.addActionListener(e -> carregarDados());
         finalizarButton.addActionListener(e -> finalizarSistema());
 
-        // Criar o painel para adicionar os botões
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 2, 10, 10)); // Layout com 5 linhas e 2 colunas, espaçamento de 10px entre os botões
+        panel.setLayout(new GridLayout(5, 2, 10, 10)); 
 
-        // Adicionar os botões ao painel
         panel.add(cadastrarDroneButton);
         panel.add(cadastrarTransporteButton);
         panel.add(processarTransportesButton);
@@ -155,7 +147,6 @@ public class ACMEAirDrones {
         finalizarButton.setOpaque(true);
     }
     
-    // Método para personalizar os botões
     private void customizeButton(JButton button) {
         button.setPreferredSize(new Dimension(100, 35)); 
         button.setFont(new Font("Arial", Font.PLAIN, 20)); 
@@ -183,7 +174,6 @@ public class ACMEAirDrones {
         tituloCadastro.setForeground(new Color(255, 0, 0));
         tipoDroneFrame.add(tituloCadastro, BorderLayout.NORTH);
     
-        // Painel para os botões
         JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 10, 10));
         JButton pessoalButton = new JButton("Drone Pessoal");
         JButton cargaVivaButton = new JButton("Drone de Carga Viva");
@@ -239,7 +229,6 @@ public class ACMEAirDrones {
         cadastroFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         cadastroFrame.setLayout(new BorderLayout(10, 10));
     
-        // Estilo do título
         JLabel tituloCadastroDrone = new JLabel("Cadastro de Drone - Tipo: " + tipo, JLabel.CENTER);
         tituloCadastroDrone.setFont(new Font("Arial", Font.BOLD, 50)); 
         tituloCadastroDrone.setForeground(new Color(255, 0, 0)); 
@@ -258,7 +247,6 @@ public class ACMEAirDrones {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
     
-        // Campos de entrada
         JTextField codigoField = new JTextField(30);
         JTextField custoFixoField = new JTextField(30);
         JTextField autonomiaField = new JTextField(30);
@@ -276,8 +264,7 @@ public class ACMEAirDrones {
             protecaoBox.setBounds(1, 50, 200, 30);
         }
 
-        // Estilização dos campos de texto
-        Font inputFont = new Font("Arial", Font.PLAIN, 20); // Define uma fonte maior para os campos
+        Font inputFont = new Font("Arial", Font.PLAIN, 20);
         codigoField.setFont(inputFont);
         custoFixoField.setFont(inputFont);
         autonomiaField.setFont(inputFont);
@@ -310,10 +297,8 @@ public class ACMEAirDrones {
             protecaoBox.setBackground(new Color(255, 255, 255)); 
         }
     
-        // Estilização dos rótulos
         Font labelFont = new Font("Arial", Font.BOLD, 28); 
     
-        // Adicionar campos ao painel
         gbc.gridx = 0; gbc.gridy = 0;
         JLabel codigoLabel = new JLabel("Código do Drone:");
         codigoLabel.setFont(labelFont); 
@@ -390,7 +375,6 @@ public class ACMEAirDrones {
     
         cadastroFrame.add(new JScrollPane(mensagemArea), BorderLayout.CENTER);
     
-        // Painel para os botões
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1), 
@@ -403,7 +387,6 @@ public class ACMEAirDrones {
         JButton dadosButton = new JButton("Mostrar Dados");
         JButton terminarButton = new JButton("Terminar");
     
-        // Personalização dos botões
         salvarButton.setFont(inputFont);
         limparButton.setFont(inputFont);
         dadosButton.setFont(inputFont);
@@ -416,31 +399,25 @@ public class ACMEAirDrones {
     
         cadastroFrame.add(buttonPanel, BorderLayout.SOUTH);
     
-        // Estilizar botões
         salvarButton.setFont(new Font("Arial", Font.BOLD, 25));
         limparButton.setFont(new Font("Arial", Font.BOLD, 25));
         dadosButton.setFont(new Font("Arial", Font.BOLD, 25));
         terminarButton.setFont(new Font("Arial", Font.BOLD, 25));
     
-        // Botão Salvar - Cinza Claro
-        salvarButton.setBackground(new Color(128, 128, 128)); // Cinza Claro
-        salvarButton.setForeground(Color.WHITE); // Texto Branco
+        salvarButton.setBackground(new Color(128, 128, 128));
+        salvarButton.setForeground(Color.WHITE);
 
-        // Botão Limpar - Cinza Médio
-        limparButton.setBackground(new Color(128, 128, 128)); // Cinza Médio
-        limparButton.setForeground(Color.WHITE); // Texto Branco
+        limparButton.setBackground(new Color(128, 128, 128));
+        limparButton.setForeground(Color.WHITE);
 
-        // Botão Dados - Cinza Escuro
-        dadosButton.setBackground(new Color(128, 128, 128)); // Cinza Escuro
-        dadosButton.setForeground(Color.WHITE); // Texto Branco
+        dadosButton.setBackground(new Color(128, 128, 128));
+        dadosButton.setForeground(Color.WHITE);
     
-        // Estilizar botão "Terminar"
         terminarButton.setBackground(Color.RED);
         terminarButton.setForeground(Color.WHITE);
         terminarButton.setOpaque(true);
         terminarButton.setBorderPainted(false);
     
-        // Adicionar botões ao painel
         buttonPanel.add(salvarButton);
         buttonPanel.add(limparButton);
         buttonPanel.add(dadosButton);
@@ -560,27 +537,22 @@ public class ACMEAirDrones {
         tipoTransporte.setSize(900,600);
         tipoTransporte.setLocationRelativeTo(null);
         
-        // Título com estilo personalizado
         JLabel tituloLabel = new JLabel("ACME - Escolha o Tipo de Transporte", JLabel.CENTER);
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 45)); // Aumenta o tamanho da fonte para dar destaque
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 45));
         tituloLabel.setForeground(new Color(255,0,0)); 
         tipoTransporte.add(tituloLabel, BorderLayout.NORTH);
 
-        // Painel central com grid para os botões
         JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 10, 10));
 
-        // Criando os botões com estilo moderno
         JButton pessoalButton = new JButton("Transporte Pessoal");
         JButton cargaVivaButton = new JButton("Transporte de Carga Viva");
         JButton cargaInanimadaButton = new JButton("Transporte de Carga Inanimada");
 
-        // Estilo para os botões
-        Font buttonFont = new Font("Arial", Font.BOLD, 50); // Fonte para os botões
+        Font buttonFont = new Font("Arial", Font.BOLD, 50); 
         pessoalButton.setFont(buttonFont);
         cargaVivaButton.setFont(buttonFont);
         cargaInanimadaButton.setFont(buttonFont);
 
-        // Cores de fundo dos botões
         pessoalButton.setBackground(Color.LIGHT_GRAY);
         cargaVivaButton.setBackground(Color.LIGHT_GRAY);
         cargaInanimadaButton.setBackground(Color.LIGHT_GRAY);
@@ -593,15 +565,12 @@ public class ACMEAirDrones {
         cargaVivaButton.setPreferredSize(new Dimension(300, 200));
         cargaInanimadaButton.setPreferredSize(new Dimension(300, 200));
 
-        // Adicionando os botões ao painel
         buttonPanel.add(pessoalButton);
         buttonPanel.add(cargaVivaButton);
         buttonPanel.add(cargaInanimadaButton);
 
-        // Adicionando o painel com os botões à janela
         tipoTransporte.add(buttonPanel, BorderLayout.CENTER);
 
-        // Ações dos botões
         pessoalButton.addActionListener(e ->{
             tipoTransporte.dispose();
             cadastrarTransporte("Pessoal");
@@ -615,20 +584,18 @@ public class ACMEAirDrones {
             cadastrarTransporte("Carga Inanimada");
         });
 
-        // Tornar a janela visível
         tipoTransporte.setVisible(true);
     }
 
     public void cadastrarTransporte(String tipoTransporte) {
         JFrame novoTransporte = new JFrame("Cadastrar Transporte "+ tipoTransporte);
-        novoTransporte.setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximiza a janela
+        novoTransporte.setExtendedState(JFrame.MAXIMIZED_BOTH);
         novoTransporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         novoTransporte.setLayout(new BorderLayout(10,10));
 
-        // Criar o título
-        JLabel titulo = new JLabel("Cadastro de Transporte - Tipo: "+tipoTransporte, JLabel.CENTER); // Centraliza o título
-        titulo.setFont(new Font("Arial", Font.BOLD, 50)); // Define o tamanho e estilo da fonte
-        titulo.setForeground(new Color(255,0,0)); // Cor do texto
+        JLabel titulo = new JLabel("Cadastro de Transporte - Tipo: "+tipoTransporte, JLabel.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 50));
+        titulo.setForeground(new Color(255,0,0)); 
         titulo.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
         novoTransporte.add(titulo, BorderLayout.NORTH);
     
@@ -855,7 +822,6 @@ public class ACMEAirDrones {
         JButton botaoDados = new JButton("Mostrar Dados");
         JButton botaoSair = new JButton("Terminar");
 
-        // Estilizar botões
         botaoConfirma.setFont(inputFont);
         botaoLimpar.setFont(inputFont);
         botaoDados.setFont(inputFont);
@@ -1010,7 +976,6 @@ public class ACMEAirDrones {
 
     private boolean todosProcessados = false;
 
-    // Método para processar transportes pendentes
     public void processarTransportesPendentes() {
         JFrame processarTransportesPendentes = new JFrame("Transportes Pendentes");
         processarTransportesPendentes.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -1019,7 +984,7 @@ public class ACMEAirDrones {
 
         JLabel tituloProcessarTransportesPendentes = new JLabel("Processar Transportes Pendentes", JLabel.CENTER);
         tituloProcessarTransportesPendentes.setFont(new Font("Arial", Font.BOLD, 70));
-        tituloProcessarTransportesPendentes.setForeground(new Color(255, 0, 0)); // Vermelho
+        tituloProcessarTransportesPendentes.setForeground(new Color(255, 0, 0));
         tituloProcessarTransportesPendentes.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
         processarTransportesPendentes.add(tituloProcessarTransportesPendentes, BorderLayout.NORTH);
 
@@ -1067,7 +1032,6 @@ public class ACMEAirDrones {
 
         terminarButton.addActionListener(e -> processarTransportesPendentes.dispose());
 
-        // Ação para o botão "Processar Transportes"
         processarButton.addActionListener(e -> {
             if (todosProcessados) {
                 mensagemArea.append("Não há mais transportes pendentes para serem processados.\n");
@@ -1149,30 +1113,26 @@ public class ACMEAirDrones {
     }
 
     public void mostrarRelatorioGeral() {
-        // Criando a janela principal para mostrar o relatório
         JFrame mostrarRelatorioGeralFrame = new JFrame("Relatório Geral");
-        mostrarRelatorioGeralFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Janela maximizada
-        mostrarRelatorioGeralFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha a janela ao clicar no X
-        mostrarRelatorioGeralFrame.setLayout(new BorderLayout(10, 10)); // Layout com espaçamento
+        mostrarRelatorioGeralFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        mostrarRelatorioGeralFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+        mostrarRelatorioGeralFrame.setLayout(new BorderLayout(10, 10)); 
     
-        // Título do relatório
         JLabel tituloRelatorioGeral = new JLabel("ACME - Relatório Geral", JLabel.CENTER);
         tituloRelatorioGeral.setFont(new Font("Arial", Font.BOLD, 70));
         tituloRelatorioGeral.setForeground(new Color(255, 0, 0)); 
         tituloRelatorioGeral.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
         mostrarRelatorioGeralFrame.add(tituloRelatorioGeral, BorderLayout.NORTH);
     
-        // Área de texto para exibição do relatório
         JTextArea relatorioArea = new JTextArea(30, 60);
-        relatorioArea.setEditable(false); // Não pode editar o conteúdo
-        relatorioArea.setWrapStyleWord(true); // Palavras não são quebradas no meio
-        relatorioArea.setLineWrap(true); // Quebra de linha automática
-        relatorioArea.setBackground(new Color(255, 250, 240)); // Cor de fundo clara
-        relatorioArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // Borda leve
-        relatorioArea.setFont(new Font("Arial", Font.PLAIN, 21)); // Fonte do texto
-        mostrarRelatorioGeralFrame.add(new JScrollPane(relatorioArea), BorderLayout.CENTER); // Envolvendo o JTextArea em um JScrollPane para permitir rolagem
+        relatorioArea.setEditable(false); 
+        relatorioArea.setWrapStyleWord(true); 
+        relatorioArea.setLineWrap(true);
+        relatorioArea.setBackground(new Color(255, 250, 240)); 
+        relatorioArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); 
+        relatorioArea.setFont(new Font("Arial", Font.PLAIN, 21));
+        mostrarRelatorioGeralFrame.add(new JScrollPane(relatorioArea), BorderLayout.CENTER); 
    
-        // Relatorio Geral
         StringBuilder relatorioGeral = new StringBuilder();
         
         relatorioGeral.append("--- DRONES: ---\n");
@@ -1192,73 +1152,62 @@ public class ACMEAirDrones {
 
         relatorioArea.setText(relatorioGeral.toString());
 
-        // Painel de botões
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1), // Borda para o painel
-            BorderFactory.createEmptyBorder(10, 10, 10, 10) // Espaçamento interno
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1), 
+            BorderFactory.createEmptyBorder(10, 10, 10, 10) 
         ));
     
-        // Botão de "Fechar"
         JButton fecharButton = new JButton("Fechar");
         fecharButton.setFont(new Font("Arial", Font.BOLD, 25));
-        fecharButton.setBackground(new Color(255, 0, 0)); // Cor vermelha para o botão
+        fecharButton.setBackground(new Color(255, 0, 0)); 
         fecharButton.setForeground(Color.WHITE);
         fecharButton.setOpaque(true);
         fecharButton.setBorderPainted(false);
     
-        // Adiciona o botão ao painel de botões
         buttonPanel.add(fecharButton);
         mostrarRelatorioGeralFrame.add(buttonPanel, BorderLayout.SOUTH);
     
-        // Ação para o botão "Fechar" - Fecha a janela ao ser clicado
         fecharButton.addActionListener(e -> mostrarRelatorioGeralFrame.dispose());
     
-        // Tornando a janela visível
         mostrarRelatorioGeralFrame.setVisible(true);
     
     }
 
     public void mostrarTransportes() {
-        // Criando a janela principal para mostrar os transportes
         JFrame mostrarTransportesFrame = new JFrame("Transportes e Drones");
-        mostrarTransportesFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Janela maximizada
-        mostrarTransportesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha a janela ao clicar no X
-        mostrarTransportesFrame.setLayout(new BorderLayout(10, 10)); // Layout com espaçamento
+        mostrarTransportesFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        mostrarTransportesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+        mostrarTransportesFrame.setLayout(new BorderLayout(10, 10)); 
     
-        // Título da janela
         JLabel tituloTransportes = new JLabel(" ACME - Relatório de Transportes e Drones", JLabel.CENTER);
         tituloTransportes.setFont(new Font("Arial", Font.BOLD, 70));
         tituloTransportes.setForeground(new Color(255, 0, 0)); 
         tituloTransportes.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
         mostrarTransportesFrame.add(tituloTransportes, BorderLayout.NORTH);
     
-        // Área de texto para exibição do relatório
         JTextArea transportesArea = new JTextArea(30, 60);
-        transportesArea.setEditable(false); // Não pode editar o conteúdo
-        transportesArea.setWrapStyleWord(true); // Palavras não são quebradas no meio
-        transportesArea.setLineWrap(true); // Quebra de linha automática
-        transportesArea.setBackground(new Color(255, 250, 240)); // Cor de fundo clara
-        transportesArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // Borda leve
-        transportesArea.setFont(new Font("Arial", Font.PLAIN, 21)); // Fonte do texto
-        mostrarTransportesFrame.add(new JScrollPane(transportesArea), BorderLayout.CENTER); // Envolvendo o JTextArea em um JScrollPane para permitir rolagem
+        transportesArea.setEditable(false); 
+        transportesArea.setWrapStyleWord(true); 
+        transportesArea.setLineWrap(true); 
+        transportesArea.setBackground(new Color(255, 250, 240)); 
+        transportesArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); 
+        transportesArea.setFont(new Font("Arial", Font.PLAIN, 21)); 
+        mostrarTransportesFrame.add(new JScrollPane(transportesArea), BorderLayout.CENTER); 
     
-        // Painel de botões
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1), // Borda para o painel
-            BorderFactory.createEmptyBorder(10, 10, 10, 10) // Espaçamento interno
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1), 
+            BorderFactory.createEmptyBorder(10, 10, 10, 10) 
         ));
     
-        // Botão de "Fechar"
         JButton fecharButton = new JButton("Fechar");
         fecharButton.setFont(new Font("Arial", Font.BOLD, 25));
-        fecharButton.setBackground(new Color(255, 0, 0)); // Cor vermelha para o botão
+        fecharButton.setBackground(new Color(255, 0, 0)); 
         fecharButton.setForeground(Color.WHITE);
         fecharButton.setOpaque(true);
         fecharButton.setBorderPainted(false);
     
-        // Adiciona o botão ao painel de botões
         buttonPanel.add(fecharButton);
         mostrarTransportesFrame.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -1274,10 +1223,8 @@ public class ACMEAirDrones {
     
         transportesArea.append(todosTransportes.toString());
 
-        // Ação para o botão "Fechar" - Fecha a janela ao ser clicado
         fecharButton.addActionListener(e -> mostrarTransportesFrame.dispose());
     
-        // Tornando a janela visível
         mostrarTransportesFrame.setVisible(true);
     }
 
@@ -1289,22 +1236,19 @@ public class ACMEAirDrones {
     };
 
     public void alterarSituacaoTransporte() {
-        // Criando a janela para alterar a situação do transporte
         JFrame alterarSituacaoButton = new JFrame("Alterar Situação do Transporte");
         alterarSituacaoButton.setExtendedState(JFrame.MAXIMIZED_BOTH);
         alterarSituacaoButton.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         alterarSituacaoButton.setLayout(new BorderLayout(10, 10));
 
-        // Título da janela
         JLabel tituloLabel = new JLabel("ACME - Alterar Situação do Transporte", JLabel.CENTER);
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); // Aumentando o tamanho da fonte
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); 
         tituloLabel.setForeground(Color.RED);
-        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Maior espaçamento
+        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         alterarSituacaoButton.add(tituloLabel, BorderLayout.NORTH);
 
-        // Painel central para exibir os dados do transporte
         JPanel centralPanel = new JPanel();
-        centralPanel.setLayout(new GridBagLayout()); // Usando GridBagLayout para um layout mais flexível
+        centralPanel.setLayout(new GridBagLayout()); 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(20, 20, 20, 20);
@@ -1315,22 +1259,20 @@ public class ACMEAirDrones {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-        // Campo de texto para inserir o número do transporte
         JLabel numeroLabel = new JLabel("Número do Transporte:");
-        numeroLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
-        JTextField numeroTextField = new JTextField(30); // Aumentando a largura do campo
-        numeroTextField.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+        numeroLabel.setFont(new Font("Arial", Font.PLAIN, 50)); 
+        JTextField numeroTextField = new JTextField(30); 
+        numeroTextField.setFont(new Font("Arial", Font.PLAIN, 24));
         
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         centralPanel.add(numeroLabel, gbc);
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
         centralPanel.add(numeroTextField, gbc);
 
-        // Área de texto para exibir os dados do transporte
-        JTextArea transporteInfoArea = new JTextArea(15, 60); // Aumentando a altura e a largura
-        transporteInfoArea.setEditable(false); // Não pode editar
-        transporteInfoArea.setFont(new Font("Arial", Font.PLAIN, 20)); // Fonte maior
-        transporteInfoArea.setBackground(new Color(255, 250, 240)); // Fundo claro
+        JTextArea transporteInfoArea = new JTextArea(15, 60);
+        transporteInfoArea.setEditable(false); 
+        transporteInfoArea.setFont(new Font("Arial", Font.PLAIN, 20)); 
+        transporteInfoArea.setBackground(new Color(255, 250, 240)); 
         transporteInfoArea.setLineWrap(true);
         transporteInfoArea.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(transporteInfoArea);
@@ -1341,39 +1283,36 @@ public class ACMEAirDrones {
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
         centralPanel.add(scrollPane, gbc);
 
-        // ComboBox para selecionar a nova situação
         JLabel situacaoLabel = new JLabel("Nova Situação:");
-        situacaoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
+        situacaoLabel.setFont(new Font("Arial", Font.PLAIN, 50));
         String[] situacoes = {"PENDENTE", "TERMINADO", "CANCELADO"};
         JComboBox<String> situacaoComboBox = new JComboBox<>(situacoes);
-        situacaoComboBox.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+        situacaoComboBox.setFont(new Font("Arial", Font.PLAIN, 24)); 
 
         gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
         centralPanel.add(situacaoLabel, gbc);
         gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
         centralPanel.add(situacaoComboBox, gbc);
 
-        // Botões de ação
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); // Distribuir botões de forma mais equilibrada
+        buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); 
         JButton buscarButton = new JButton("Buscar");
         JButton alterarButton = new JButton("Alterar Situação");
         JButton cancelarButton = new JButton("Cancelar");
 
-        // Definir fontes e cores dos botões
-        buscarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-        buscarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
+        buscarButton.setFont(new Font("Arial", Font.BOLD, 24)); 
+        buscarButton.setPreferredSize(new Dimension(200, 60)); 
         buscarButton.setBackground(new Color(128, 128, 128));
         buscarButton.setForeground(Color.WHITE);
         
-        alterarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-        alterarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
+        alterarButton.setFont(new Font("Arial", Font.BOLD, 24));
+        alterarButton.setPreferredSize(new Dimension(200, 60)); 
         alterarButton.setBackground(new Color(128, 128, 128));
         alterarButton.setForeground(Color.WHITE);
         
-        cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-        cancelarButton.setPreferredSize(new Dimension(200, 60)); // Aumentando o tamanho do botão
-        cancelarButton.setBackground(new Color(255, 0, 0)); // Vermelho
+        cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); 
+        cancelarButton.setPreferredSize(new Dimension(200, 60)); 
+        cancelarButton.setBackground(new Color(255, 0, 0)); 
         cancelarButton.setForeground(Color.WHITE);
 
         buttonPanel.add(buscarButton);
@@ -1452,61 +1391,54 @@ public class ACMEAirDrones {
     }
 
     public void lerDadosSimulacao() {
-        // Criando a janela para ler os dados de simulação
         JFrame lerDadosFrame = new JFrame("Ler Dados Simulação");
         lerDadosFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         lerDadosFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         lerDadosFrame.setLayout(new BorderLayout(10, 10));
 
-        // Título da janela
         JLabel tituloLabel = new JLabel("ACME - Ler Dados Simulação", JLabel.CENTER);
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); // Fonte maior
-        tituloLabel.setForeground(Color.RED);  // Cor do título
-        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Maior espaçamento
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); 
+        tituloLabel.setForeground(Color.RED);  
+        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         lerDadosFrame.add(tituloLabel, BorderLayout.NORTH);
 
-        // Painel central para exibir os dados de leitura
         JPanel centralPanel = new JPanel();
-        centralPanel.setLayout(new GridBagLayout()); // Usando GridBagLayout para um layout flexível
+        centralPanel.setLayout(new GridBagLayout()); 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(20, 20, 20, 20);
         
-        // Campo de texto para inserir o nome do arquivo
         JLabel nomeArquivoLabel = new JLabel("Nome do Arquivo:");
-        nomeArquivoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
-        JTextField nomeArquivoField = new JTextField(30); // Aumentando a largura do campo
-        nomeArquivoField.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+        nomeArquivoLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+        JTextField nomeArquivoField = new JTextField(30); 
+        nomeArquivoField.setFont(new Font("Arial", Font.PLAIN, 24)); 
         
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         centralPanel.add(nomeArquivoLabel, gbc);
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
         centralPanel.add(nomeArquivoField, gbc);
 
-        // Barra de progresso
         JProgressBar progressBar = new JProgressBar();
-        progressBar.setIndeterminate(true); // Para mostrar que a leitura está em andamento
+        progressBar.setIndeterminate(true); 
         progressBar.setPreferredSize(new Dimension(400, 30));
-        progressBar.setVisible(false); // Inicialmente invisível
+        progressBar.setVisible(false); 
 
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
         centralPanel.add(progressBar, gbc);
 
-        // Botões de ação
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); // Distribuir os botões de forma equilibrada
+        buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); 
         JButton lerButton = new JButton("Ler Dados");
         JButton cancelarButton = new JButton("Cancelar");
 
-        // Definir fontes e cores dos botões
-        lerButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-        lerButton.setPreferredSize(new Dimension(200, 60)); // Tamanho do botão
+        lerButton.setFont(new Font("Arial", Font.BOLD, 24)); 
+        lerButton.setPreferredSize(new Dimension(200, 60)); 
         lerButton.setBackground(new Color(128, 128, 128)); 
         lerButton.setForeground(Color.WHITE);
         
-        cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-        cancelarButton.setPreferredSize(new Dimension(200, 60)); // Tamanho do botão
-        cancelarButton.setBackground(new Color(255, 0, 0)); // Vermelho
+        cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); 
+        cancelarButton.setPreferredSize(new Dimension(200, 60)); 
+        cancelarButton.setBackground(new Color(255, 0, 0));
         cancelarButton.setForeground(Color.WHITE);
 
         buttonPanel.add(lerButton);
@@ -1517,139 +1449,154 @@ public class ACMEAirDrones {
 
         lerDadosFrame.add(centralPanel, BorderLayout.CENTER);
 
-    // Ação do botão "Ler Dados"
-    lerButton.addActionListener(e -> {
-        String nomeArquivo = nomeArquivoField.getText().trim();
-        if (nomeArquivo.isEmpty()) {
-            JOptionPane.showMessageDialog(lerDadosFrame, "Por favor, insira o nome do arquivo!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        lerButton.addActionListener(e -> {
+            String nomeArquivo = nomeArquivoField.getText().trim();
+            if (nomeArquivo.isEmpty()) {
+                JOptionPane.showMessageDialog(lerDadosFrame, "Por favor, insira o nome do arquivo!", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-        // Exibir a barra de progresso enquanto os dados estão sendo lidos
-        progressBar.setVisible(true);
+            progressBar.setVisible(true);
 
-        try {
-            // Chama o método lerDadosAux para carregar os dados
-            lerDadosAux(nomeArquivo);
-            JOptionPane.showMessageDialog(lerDadosFrame, "Dados lidos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(lerDadosFrame, "Erro ao carregar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            progressBar.setVisible(false); // Esconde a barra de progresso após a leitura
-        }
-    });
+            try {
+                lerDadosAux(nomeArquivo);
+                JOptionPane.showMessageDialog(lerDadosFrame, "Dados lidos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(lerDadosFrame, "Erro ao carregar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                progressBar.setVisible(false);
+            }
+        });
 
-    // Ação do botão "Cancelar"
-    cancelarButton.addActionListener(e -> {
-        lerDadosFrame.dispose(); // Fecha a janela
-    });
+        cancelarButton.addActionListener(e -> {
+            lerDadosFrame.dispose();
+        });
 
-    lerDadosFrame.setVisible(true);
+        lerDadosFrame.setVisible(true);
     }
 
     public void lerDadosAux(String nomeArquivo) {
-    Path path = Paths.get(nomeArquivo + ".csv");
-    
-    try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())) {
-        String linha;
-        boolean carregandoDrones = false;
-        boolean carregandoTransportes = false;
+        Path path = Paths.get(nomeArquivo + ".csv");
+        
+        try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())) {
+            String linha;
+            boolean carregandoDrones = false;
+            boolean carregandoTransportes = false;
 
-        while ((linha = reader.readLine()) != null) {
-            // Ignorar linhas vazias
-            if (linha.trim().isEmpty()) continue;
+            while ((linha = reader.readLine()) != null) {
+                if (linha.trim().isEmpty()) continue;
 
-            // Verifica se a linha é para começar a carregar drones ou transportes
-            if (linha.equals("DRONES:")) {
-                carregandoDrones = true;
-                carregandoTransportes = false;
-                continue;
-            } else if (linha.equals("TRANSPORTES:")) {
-                carregandoDrones = false;
-                carregandoTransportes = true;
-                continue;
+                if (linha.equals("DRONES:")) {
+                    carregandoDrones = true;
+                    carregandoTransportes = false;
+                    continue;
+                } else if (linha.equals("TRANSPORTES:")) {
+                    carregandoDrones = false;
+                    carregandoTransportes = true;
+                    continue;
+                }
+
+                if (carregandoDrones){
+                    String[] data = linha.split(";");
+                    try {
+                        if (Integer.parseInt(data[0]) == 1){
+                            DronePessoal d = new DronePessoal(Integer.parseInt(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Integer.parseInt(data[4]));
+                            dronesCadastrados.add(d);
+                        } else if (Integer.parseInt(data[0]) == 2){
+                            DroneCargaInanimada d = new DroneCargaInanimada(Integer.parseInt(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Double.parseDouble(data[4]), Boolean.parseBoolean(data[5]));
+                            dronesCadastrados.add(d);
+                        } else if (Integer.parseInt(data[0]) == 3){
+                            DroneCargaViva d = new DroneCargaViva(Integer.parseInt(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Double.parseDouble(data[4]), Boolean.parseBoolean(data[5]));
+                            dronesCadastrados.add(d);
+                        }
+                    } catch (InputMismatchException in){
+                        System.err.format("Erro: %s%n", in);
+                    }
+                }
+
+                if (carregandoTransportes){
+                    String data[] = linha.split(";");
+                    try {
+                        if (Integer.parseInt(data[0]) == 1){
+                            TransportePessoal t = new TransportePessoal(Integer.parseInt(data[1]), data[2], data[3], Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Double.parseDouble(data[8]), Integer.parseInt(data[9]));
+                            transportes.add(t);
+                        } else if (Integer.parseInt(data[0]) == 2){
+                            TransporteCargaInanimada t = new TransporteCargaInanimada(Integer.parseInt(data[1]), data[2], data[3], Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Double.parseDouble(data[8]), Boolean.parseBoolean(data[9]));
+                            transportes.add(t);
+                        } else if (Integer.parseInt(data[0]) == 3){
+                            TransporteCargaViva t = new TransporteCargaViva(Integer.parseInt(data[1]), data[2], data[3], Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Double.parseDouble(data[8]), Double.parseDouble(data[9]), Double.parseDouble(data[10]));
+                            transportes.add(t);
+                        }
+                    } catch (InputMismatchException in){
+                        System.err.format("Erro: %s%n", in);
+                    }
+                }
             }
 
-            // Processar dados dos drones
-            //TRABALHEM BACKEND
-            
-            // Processar dados dos transportes
-            //TRABALHEM BACKEND
-            
-        }
+            System.out.println("Drones carregados:");
+            for (Drone d : dronesCadastrados) {
+                System.out.println(d);
+            }
 
-        // Após ler todos os dados, exibe as informações de todos os drones e transportes carregados
-        System.out.println("Drones carregados:");
-        for (Drone d : dronesCadastrados) {
-            System.out.println(d);
-        }
+            System.out.println("Transportes carregados:");
+            for (Transporte t : transportesPendentes) {
+                System.out.println(t);
+            }
 
-        System.out.println("Transportes carregados:");
-        for (Transporte t : transportesPendentes) {
-            System.out.println(t);
+        } catch (IOException e) {
+            System.err.format("Erro ao ler o arquivo: %s%n", e);
         }
-
-    } catch (IOException e) {
-        System.err.format("Erro ao ler o arquivo: %s%n", e);
-    }
     }
 
     public void salvarDados() {
-        // Criando a janela para salvar os dados
         JFrame salvarDadosFrame = new JFrame("Salvar Dados");
         salvarDadosFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         salvarDadosFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         salvarDadosFrame.setLayout(new BorderLayout(10, 10));
 
-        // Título da janela
         JLabel tituloLabel = new JLabel("ACME - Salvar Dados", JLabel.CENTER);
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); // Fonte maior
-        tituloLabel.setForeground(Color.RED);  // Cor do título
-        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Maior espaçamento
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); 
+        tituloLabel.setForeground(Color.RED);  
+        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); 
         salvarDadosFrame.add(tituloLabel, BorderLayout.NORTH);
 
-        // Painel central para exibir os dados de salvamento
         JPanel centralPanel = new JPanel();
-        centralPanel.setLayout(new GridBagLayout()); // Usando GridBagLayout para um layout flexível
+        centralPanel.setLayout(new GridBagLayout()); 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(20, 20, 20, 20);
         
-        // Campo de texto para inserir o nome do arquivo
         JLabel nomeArquivoLabel = new JLabel("Nome do Arquivo:");
-        nomeArquivoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
-        JTextField nomeArquivoField = new JTextField(30); // Aumentando a largura do campo
-        nomeArquivoField.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+        nomeArquivoLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+        JTextField nomeArquivoField = new JTextField(30); 
+        nomeArquivoField.setFont(new Font("Arial", Font.PLAIN, 24));
         
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         centralPanel.add(nomeArquivoLabel, gbc);
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
         centralPanel.add(nomeArquivoField, gbc);
 
-        // Barra de progresso
         JProgressBar progressBar = new JProgressBar();
-        progressBar.setIndeterminate(true); // Para mostrar que o salvamento está em andamento
+        progressBar.setIndeterminate(true); 
         progressBar.setPreferredSize(new Dimension(400, 30));
-        progressBar.setVisible(false); // Inicialmente invisível
+        progressBar.setVisible(false); 
 
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
         centralPanel.add(progressBar, gbc);
 
-        // Botões de ação
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); // Distribuir os botões de forma equilibrada
+        buttonPanel.setLayout(new GridLayout(1, 3, 30, 0));
         JButton salvarButton = new JButton("Salvar");
         JButton cancelarButton = new JButton("Cancelar");
 
-        // Definir fontes e cores dos botões
-        salvarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-        salvarButton.setPreferredSize(new Dimension(200, 60)); // Tamanho do botão
+        salvarButton.setFont(new Font("Arial", Font.BOLD, 24)); 
+        salvarButton.setPreferredSize(new Dimension(200, 60));
         salvarButton.setBackground(new Color(128, 128, 128)); 
         salvarButton.setForeground(Color.WHITE);
         
-        cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-        cancelarButton.setPreferredSize(new Dimension(200, 60)); // Tamanho do botão
-        cancelarButton.setBackground(new Color(255, 0, 0)); // Vermelho
+        cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); 
+        cancelarButton.setPreferredSize(new Dimension(200, 60)); 
+        cancelarButton.setBackground(new Color(255, 0, 0));
         cancelarButton.setForeground(Color.WHITE);
 
         buttonPanel.add(salvarButton);
@@ -1660,7 +1607,6 @@ public class ACMEAirDrones {
 
         salvarDadosFrame.add(centralPanel, BorderLayout.CENTER);
 
-        // Ação do botão "Salvar"
         salvarButton.addActionListener(e -> {
             String nomeArquivo = nomeArquivoField.getText().trim();
             if (nomeArquivo.isEmpty()) {
@@ -1668,23 +1614,20 @@ public class ACMEAirDrones {
                 return;
             }
 
-            // Exibir a barra de progresso enquanto os dados estão sendo salvos
             progressBar.setVisible(true);
 
             try {
-                // Chama o método salvarDadosAux passando o nome do arquivo
                 salvarDadosAux(nomeArquivo);
                 JOptionPane.showMessageDialog(salvarDadosFrame, "Dados salvos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(salvarDadosFrame, "Erro ao salvar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             } finally {
-                progressBar.setVisible(false); // Esconde a barra de progresso após o salvamento
+                progressBar.setVisible(false);
             }
         });
 
-        // Ação do botão "Cancelar"
         cancelarButton.addActionListener(e -> {
-            salvarDadosFrame.dispose(); // Fecha a janela
+            salvarDadosFrame.dispose(); 
         });
 
         salvarDadosFrame.setVisible(true);
@@ -1715,73 +1658,65 @@ public class ACMEAirDrones {
     }
 
     public void carregarDados() {
-        // Criando a janela para carregar os dados
         JFrame carregarDadosFrame = new JFrame("Carregar Dados");
         carregarDadosFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         carregarDadosFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         carregarDadosFrame.setLayout(new BorderLayout(10, 10));
 
-        // Título da janela
         JLabel tituloLabel = new JLabel("ACME - Carregar Dados", JLabel.CENTER);
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); // Fonte maior
-        tituloLabel.setForeground(Color.RED);  // Cor do título
-        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Maior espaçamento
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 90));
+        tituloLabel.setForeground(Color.RED);  
+        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         carregarDadosFrame.add(tituloLabel, BorderLayout.NORTH);
 
-        // Painel central para exibir os dados de carregamento
         JPanel centralPanel = new JPanel();
-        centralPanel.setLayout(new GridBagLayout()); // Usando GridBagLayout para um layout flexível
+        centralPanel.setLayout(new GridBagLayout()); 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(20, 20, 20, 20);
         
-        // Campo de texto para inserir o nome do arquivo
         JLabel nomeArquivoLabel = new JLabel("Nome do Arquivo:");
-        nomeArquivoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
-        JTextField nomeArquivoField = new JTextField(30); // Aumentando a largura do campo
-        nomeArquivoField.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+        nomeArquivoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); 
+        JTextField nomeArquivoField = new JTextField(30); 
+        nomeArquivoField.setFont(new Font("Arial", Font.PLAIN, 24)); 
         
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         centralPanel.add(nomeArquivoLabel, gbc);
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
         centralPanel.add(nomeArquivoField, gbc);
 
-        // ComboBox para selecionar o tipo de dado
         JLabel tipoLabel = new JLabel("Tipo de Dado:");
-        tipoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
+        tipoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); 
         String[] tipos = {"Drone Pessoal", "Drone Carga Viva", "Drone Carga Inanimada", "Transporte Pessoal", "Transporte Carga Viva", "Transporte Carga Inanimada"};
         JComboBox<String> tipoComboBox = new JComboBox<>(tipos);
-        tipoComboBox.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+        tipoComboBox.setFont(new Font("Arial", Font.PLAIN, 24)); 
 
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
         centralPanel.add(tipoLabel, gbc);
         gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
         centralPanel.add(tipoComboBox, gbc);
 
-        // Barra de progresso
         JProgressBar progressBar = new JProgressBar();
-        progressBar.setIndeterminate(true); // Para mostrar que o carregamento está em andamento
+        progressBar.setIndeterminate(true); 
         progressBar.setPreferredSize(new Dimension(400, 30));
-        progressBar.setVisible(false); // Inicialmente invisível
+        progressBar.setVisible(false); 
 
         gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
         centralPanel.add(progressBar, gbc);
 
-        // Botões de ação
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); // Distribuir os botões de forma equilibrada
+        buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); 
         JButton carregarButton = new JButton("Carregar");
         JButton cancelarButton = new JButton("Cancelar");
 
-        // Definir fontes e cores dos botões
-        carregarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-        carregarButton.setPreferredSize(new Dimension(200, 60)); // Tamanho do botão
+        carregarButton.setFont(new Font("Arial", Font.BOLD, 24)); 
+        carregarButton.setPreferredSize(new Dimension(200, 60));
         carregarButton.setBackground(new Color(128, 128, 128));
         carregarButton.setForeground(Color.WHITE);
         
-        cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
-        cancelarButton.setPreferredSize(new Dimension(200, 60)); // Tamanho do botão
-        cancelarButton.setBackground(new Color(255, 0, 0)); // Vermelho
+        cancelarButton.setFont(new Font("Arial", Font.BOLD, 24));
+        cancelarButton.setPreferredSize(new Dimension(200, 60));
+        cancelarButton.setBackground(new Color(255, 0, 0));
         cancelarButton.setForeground(Color.WHITE);
 
         buttonPanel.add(carregarButton);
@@ -1792,34 +1727,32 @@ public class ACMEAirDrones {
 
         carregarDadosFrame.add(centralPanel, BorderLayout.CENTER);
 
-    carregarButton.addActionListener(e -> {
-        String nomeArquivo = nomeArquivoField.getText().trim();
-        if (nomeArquivo.isEmpty()) {
-            JOptionPane.showMessageDialog(carregarDadosFrame, "Por favor, insira o nome do arquivo!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        carregarButton.addActionListener(e -> {
+            String nomeArquivo = nomeArquivoField.getText().trim();
+            if (nomeArquivo.isEmpty()) {
+                JOptionPane.showMessageDialog(carregarDadosFrame, "Por favor, insira o nome do arquivo!", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-        int tipo = tipoComboBox.getSelectedIndex() + 1; // O tipo é baseado no índice selecionado
-        
-        // Exibir a barra de progresso enquanto os dados estão sendo carregados
-        progressBar.setVisible(true);
+            int tipo = tipoComboBox.getSelectedIndex() + 1;
+            
+            progressBar.setVisible(true);
 
-        try {
-            // Chama o método carregarDadosAux passando o nome do arquivo e tipo de dado
-            carregarDadosAux(nomeArquivo, tipo);
-            JOptionPane.showMessageDialog(carregarDadosFrame, "Dados carregados com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(carregarDadosFrame, "Erro ao processar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            progressBar.setVisible(false); // Esconde a barra de progresso após o carregamento
-        }
-    });
+            try {
+                carregarDadosAux(nomeArquivo, tipo);
+                JOptionPane.showMessageDialog(carregarDadosFrame, "Dados carregados com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(carregarDadosFrame, "Erro ao processar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                progressBar.setVisible(false);
+            }
+        });
 
-    cancelarButton.addActionListener(e -> {
-        carregarDadosFrame.dispose(); // Fecha a janela
-    });
+        cancelarButton.addActionListener(e -> {
+            carregarDadosFrame.dispose();
+        });
 
-    carregarDadosFrame.setVisible(true);
+        carregarDadosFrame.setVisible(true);
     }
 
     public void carregarDadosAux(String caminho, int tipo) {
@@ -1829,7 +1762,6 @@ public class ACMEAirDrones {
             while((line = reader.readLine()) != null) {
                 String[] data = line.split(";");
                 try {
-                    // Processa os dados conforme o tipo selecionado
                     if (tipo == 1) {
                         Drone aux = new DronePessoal(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Integer.parseInt(data[3]));
                         dronesCadastrados.add(aux);
