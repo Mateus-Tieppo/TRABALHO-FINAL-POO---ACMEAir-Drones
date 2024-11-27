@@ -1450,9 +1450,147 @@ public class ACMEAirDrones {
         alterarSituacaoButton.setVisible(true);
     }
 
-
     public void lerDadosSimulacao() {
+        // Criando a janela para ler os dados de simulação
+        JFrame lerDadosFrame = new JFrame("Ler Dados Simulação");
+        lerDadosFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        lerDadosFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        lerDadosFrame.setLayout(new BorderLayout(10, 10));
 
+        // Título da janela
+        JLabel tituloLabel = new JLabel("ACME - Ler Dados Simulação", JLabel.CENTER);
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); // Fonte maior
+        tituloLabel.setForeground(Color.RED);  // Cor do título
+        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Maior espaçamento
+        lerDadosFrame.add(tituloLabel, BorderLayout.NORTH);
+
+        // Painel central para exibir os dados de leitura
+        JPanel centralPanel = new JPanel();
+        centralPanel.setLayout(new GridBagLayout()); // Usando GridBagLayout para um layout flexível
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(20, 20, 20, 20);
+        
+        // Campo de texto para inserir o nome do arquivo
+        JLabel nomeArquivoLabel = new JLabel("Nome do Arquivo:");
+        nomeArquivoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
+        JTextField nomeArquivoField = new JTextField(30); // Aumentando a largura do campo
+        nomeArquivoField.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+        
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        centralPanel.add(nomeArquivoLabel, gbc);
+        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
+        centralPanel.add(nomeArquivoField, gbc);
+
+        // Barra de progresso
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setIndeterminate(true); // Para mostrar que a leitura está em andamento
+        progressBar.setPreferredSize(new Dimension(400, 30));
+        progressBar.setVisible(false); // Inicialmente invisível
+
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+        centralPanel.add(progressBar, gbc);
+
+        // Botões de ação
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); // Distribuir os botões de forma equilibrada
+        JButton lerButton = new JButton("Ler Dados");
+        JButton cancelarButton = new JButton("Cancelar");
+
+        // Definir fontes e cores dos botões
+        lerButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
+        lerButton.setPreferredSize(new Dimension(200, 60)); // Tamanho do botão
+        lerButton.setBackground(new Color(128, 128, 128)); 
+        lerButton.setForeground(Color.WHITE);
+        
+        cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
+        cancelarButton.setPreferredSize(new Dimension(200, 60)); // Tamanho do botão
+        cancelarButton.setBackground(new Color(255, 0, 0)); // Vermelho
+        cancelarButton.setForeground(Color.WHITE);
+
+        buttonPanel.add(lerButton);
+        buttonPanel.add(cancelarButton);
+
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        centralPanel.add(buttonPanel, gbc);
+
+        lerDadosFrame.add(centralPanel, BorderLayout.CENTER);
+
+    // Ação do botão "Ler Dados"
+    lerButton.addActionListener(e -> {
+        String nomeArquivo = nomeArquivoField.getText().trim();
+        if (nomeArquivo.isEmpty()) {
+            JOptionPane.showMessageDialog(lerDadosFrame, "Por favor, insira o nome do arquivo!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Exibir a barra de progresso enquanto os dados estão sendo lidos
+        progressBar.setVisible(true);
+
+        try {
+            // Chama o método lerDadosAux para carregar os dados
+            lerDadosAux(nomeArquivo);
+            JOptionPane.showMessageDialog(lerDadosFrame, "Dados lidos com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(lerDadosFrame, "Erro ao carregar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            progressBar.setVisible(false); // Esconde a barra de progresso após a leitura
+        }
+    });
+
+    // Ação do botão "Cancelar"
+    cancelarButton.addActionListener(e -> {
+        lerDadosFrame.dispose(); // Fecha a janela
+    });
+
+    lerDadosFrame.setVisible(true);
+    }
+
+    public void lerDadosAux(String nomeArquivo) {
+    Path path = Paths.get(nomeArquivo + ".csv");
+    
+    try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())) {
+        String linha;
+        boolean carregandoDrones = false;
+        boolean carregandoTransportes = false;
+
+        while ((linha = reader.readLine()) != null) {
+            // Ignorar linhas vazias
+            if (linha.trim().isEmpty()) continue;
+
+            // Verifica se a linha é para começar a carregar drones ou transportes
+            if (linha.equals("DRONES:")) {
+                carregandoDrones = true;
+                carregandoTransportes = false;
+                continue;
+            } else if (linha.equals("TRANSPORTES:")) {
+                carregandoDrones = false;
+                carregandoTransportes = true;
+                continue;
+            }
+
+            // Processar dados dos drones
+            //TRABALHEM BACKEND
+            
+            // Processar dados dos transportes
+            //TRABALHEM BACKEND
+            
+        }
+
+        // Após ler todos os dados, exibe as informações de todos os drones e transportes carregados
+        System.out.println("Drones carregados:");
+        for (Drone d : dronesCadastrados) {
+            System.out.println(d);
+        }
+
+        System.out.println("Transportes carregados:");
+        for (Transporte t : transportesPendentes) {
+            System.out.println(t);
+        }
+
+    } catch (IOException e) {
+        System.err.format("Erro ao ler o arquivo: %s%n", e);
+    }
     }
 
     public void salvarDados() {
