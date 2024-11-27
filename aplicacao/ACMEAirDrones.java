@@ -11,6 +11,8 @@ import dados.TransporteCargaViva;
 import dados.TransportePessoal;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -1457,23 +1459,121 @@ public class ACMEAirDrones {
     }
 
     public void carregarDados() {
-        /* PARA TIEPPOLA:
-         * 
-         * Faz a telinha, com um campo para o nome do arquivo (sem extensão), 
-         * e um campo seletor para o tipo de classe (DronePessoal, DroneCargaViva, DroneCargaInanimada, TransportePessoal...)
-         * 
-         * ao clicar no botão finalizar, ele chama a função auxiliar "carregarDadosAux(String caminho, int tipo)"
-         */
+        // Criando a janela para carregar os dados
+        JFrame carregarDadosFrame = new JFrame("Carregar Dados");
+        carregarDadosFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        carregarDadosFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        carregarDadosFrame.setLayout(new BorderLayout(10, 10));
+
+        // Título da janela
+        JLabel tituloLabel = new JLabel("ACME - Carregar Dados", JLabel.CENTER);
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 90)); // Fonte maior
+        tituloLabel.setForeground(Color.RED);  // Cor do título
+        tituloLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Maior espaçamento
+        carregarDadosFrame.add(tituloLabel, BorderLayout.NORTH);
+
+        // Painel central para exibir os dados de carregamento
+        JPanel centralPanel = new JPanel();
+        centralPanel.setLayout(new GridBagLayout()); // Usando GridBagLayout para um layout flexível
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(20, 20, 20, 20);
+        
+        // Campo de texto para inserir o nome do arquivo
+        JLabel nomeArquivoLabel = new JLabel("Nome do Arquivo:");
+        nomeArquivoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
+        JTextField nomeArquivoField = new JTextField(30); // Aumentando a largura do campo
+        nomeArquivoField.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+        
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        centralPanel.add(nomeArquivoLabel, gbc);
+        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
+        centralPanel.add(nomeArquivoField, gbc);
+
+        // ComboBox para selecionar o tipo de dado
+        JLabel tipoLabel = new JLabel("Tipo de Dado:");
+        tipoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Fonte maior
+        String[] tipos = {"Drone Pessoal", "Drone Carga Viva", "Drone Carga Inanimada", "Transporte Pessoal", "Transporte Carga Viva", "Transporte Carga Inanimada"};
+        JComboBox<String> tipoComboBox = new JComboBox<>(tipos);
+        tipoComboBox.setFont(new Font("Arial", Font.PLAIN, 24)); // Fonte maior
+
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+        centralPanel.add(tipoLabel, gbc);
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        centralPanel.add(tipoComboBox, gbc);
+
+        // Barra de progresso
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setIndeterminate(true); // Para mostrar que o carregamento está em andamento
+        progressBar.setPreferredSize(new Dimension(400, 30));
+        progressBar.setVisible(false); // Inicialmente invisível
+
+        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
+        centralPanel.add(progressBar, gbc);
+
+        // Botões de ação
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 3, 30, 0)); // Distribuir os botões de forma equilibrada
+        JButton carregarButton = new JButton("Carregar");
+        JButton cancelarButton = new JButton("Cancelar");
+
+        // Definir fontes e cores dos botões
+        carregarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
+        carregarButton.setPreferredSize(new Dimension(200, 60)); // Tamanho do botão
+        carregarButton.setBackground(new Color(128, 128, 128));
+        carregarButton.setForeground(Color.WHITE);
+        
+        cancelarButton.setFont(new Font("Arial", Font.BOLD, 24)); // Fonte maior
+        cancelarButton.setPreferredSize(new Dimension(200, 60)); // Tamanho do botão
+        cancelarButton.setBackground(new Color(255, 0, 0)); // Vermelho
+        cancelarButton.setForeground(Color.WHITE);
+
+        buttonPanel.add(carregarButton);
+        buttonPanel.add(cancelarButton);
+
+        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
+        centralPanel.add(buttonPanel, gbc);
+
+        carregarDadosFrame.add(centralPanel, BorderLayout.CENTER);
+
+    carregarButton.addActionListener(e -> {
+        String nomeArquivo = nomeArquivoField.getText().trim();
+        if (nomeArquivo.isEmpty()) {
+            JOptionPane.showMessageDialog(carregarDadosFrame, "Por favor, insira o nome do arquivo!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int tipo = tipoComboBox.getSelectedIndex() + 1; // O tipo é baseado no índice selecionado
+        
+        // Exibir a barra de progresso enquanto os dados estão sendo carregados
+        progressBar.setVisible(true);
+
+        try {
+            // Chama o método carregarDadosAux passando o nome do arquivo e tipo de dado
+            carregarDadosAux(nomeArquivo, tipo);
+            JOptionPane.showMessageDialog(carregarDadosFrame, "Dados carregados com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(carregarDadosFrame, "Erro ao processar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            progressBar.setVisible(false); // Esconde a barra de progresso após o carregamento
+        }
+    });
+
+    cancelarButton.addActionListener(e -> {
+        carregarDadosFrame.dispose(); // Fecha a janela
+    });
+
+    carregarDadosFrame.setVisible(true);
     }
 
     public void carregarDadosAux(String caminho, int tipo) {
         Path path = Paths.get(caminho + ".csv"); 
         try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())) {
-            String line = null;
+            String line;
             while((line = reader.readLine()) != null) {
                 String[] data = line.split(";");
-
                 try {
+                    // Processa os dados conforme o tipo selecionado
                     if (tipo == 1) {
                         Drone aux = new DronePessoal(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Integer.parseInt(data[3]));
                         dronesCadastrados.add(aux);
