@@ -1456,6 +1456,35 @@ public class ACMEAirDrones {
     }
 
     public void salvarDados() {
+        /*
+         * INFERFACE DO TIEPPOLA AQUI TAMBEM
+         * 
+         * Apenas um campo para que o usuario escreva o nome do arquivo de saida e um botão de salvar
+         */
+    }
+
+    public void salvarDadosAux(String caminho) {
+        Path path = Paths.get(caminho + ".csv");
+        try (BufferedWriter writer = Files.newBufferedWriter(path, Charset.defaultCharset())) {
+            writer.write("DRONES:");
+            writer.newLine();
+        
+            for (Drone d : dronesCadastrados) {
+                writer.write(d.toString());
+                writer.newLine();
+            }
+        
+            writer.newLine();
+            writer.write("TRANSPORTES:");
+            writer.newLine();
+        
+            for (Transporte t : transportes) {
+                writer.write(t.toString());
+                writer.newLine();
+            } 
+        } catch (IOException e){
+            System.err.format("Erro: %s%n", e);
+        }
     }
 
     public void carregarDados() {
