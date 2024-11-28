@@ -1502,12 +1502,15 @@ public class ACMEAirDrones {
                         if (Integer.parseInt(data[0]) == 1){
                             DronePessoal d = new DronePessoal(Integer.parseInt(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Integer.parseInt(data[4]));
                             dronesCadastrados.add(d);
+                            dronesDisponiveis.add(d);
                         } else if (Integer.parseInt(data[0]) == 2){
                             DroneCargaInanimada d = new DroneCargaInanimada(Integer.parseInt(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Double.parseDouble(data[4]), Boolean.parseBoolean(data[5]));
                             dronesCadastrados.add(d);
+                            dronesDisponiveis.add(d);
                         } else if (Integer.parseInt(data[0]) == 3){
                             DroneCargaViva d = new DroneCargaViva(Integer.parseInt(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Double.parseDouble(data[4]), Boolean.parseBoolean(data[5]));
                             dronesCadastrados.add(d);
+                            dronesDisponiveis.add(d);
                         }
                     } catch (InputMismatchException in){
                         System.err.format("Erro: %s%n", in);
