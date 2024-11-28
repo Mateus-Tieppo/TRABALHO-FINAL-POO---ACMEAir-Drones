@@ -1535,12 +1535,12 @@ public class ACMEAirDrones {
 
             System.out.println("Drones carregados:");
             for (Drone d : dronesCadastrados) {
-                System.out.println(d);
+                System.out.println(d.toString());
             }
 
             System.out.println("Transportes carregados:");
             for (Transporte t : transportesPendentes) {
-                System.out.println(t);
+                System.out.println(t.toString());
             }
 
         } catch (IOException e) {
