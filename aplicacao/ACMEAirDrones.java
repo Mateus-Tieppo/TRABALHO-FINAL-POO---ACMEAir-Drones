@@ -1484,20 +1484,20 @@ public class ACMEAirDrones {
             boolean carregandoTransportes = false;
 
             while ((linha = reader.readLine()) != null) {
+                String[] data = linha.split(";");
                 if (linha.trim().isEmpty()) continue;
 
-                if (linha.equals("DRONES:")) {
-                    carregandoDrones = true;
-                    carregandoTransportes = false;
-                    continue;
-                } else if (linha.equals("TRANSPORTES:")) {
+                if (data[1].equals("numero")){
                     carregandoDrones = false;
                     carregandoTransportes = true;
+                    continue;
+                } else if (data[1].equals("codigo")) {
+                    carregandoDrones = true;
+                    carregandoTransportes = false;
                     continue;
                 }
 
                 if (carregandoDrones){
-                    String[] data = linha.split(";");
                     try {
                         if (Integer.parseInt(data[0]) == 1){
                             DronePessoal d = new DronePessoal(Integer.parseInt(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Integer.parseInt(data[4]));
@@ -1515,17 +1515,19 @@ public class ACMEAirDrones {
                 }
 
                 if (carregandoTransportes){
-                    String data[] = linha.split(";");
                     try {
                         if (Integer.parseInt(data[0]) == 1){
                             TransportePessoal t = new TransportePessoal(Integer.parseInt(data[1]), data[2], data[3], Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Double.parseDouble(data[8]), Integer.parseInt(data[9]));
                             transportes.add(t);
+                            transportesPendentes.add(t);
                         } else if (Integer.parseInt(data[0]) == 2){
                             TransporteCargaInanimada t = new TransporteCargaInanimada(Integer.parseInt(data[1]), data[2], data[3], Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Double.parseDouble(data[8]), Boolean.parseBoolean(data[9]));
                             transportes.add(t);
+                            transportesPendentes.add(t);
                         } else if (Integer.parseInt(data[0]) == 3){
                             TransporteCargaViva t = new TransporteCargaViva(Integer.parseInt(data[1]), data[2], data[3], Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Double.parseDouble(data[8]), Double.parseDouble(data[9]), Double.parseDouble(data[10]));
                             transportes.add(t);
+                            transportesPendentes.add(t);
                         }
                     } catch (InputMismatchException in){
                         System.err.format("Erro: %s%n", in);

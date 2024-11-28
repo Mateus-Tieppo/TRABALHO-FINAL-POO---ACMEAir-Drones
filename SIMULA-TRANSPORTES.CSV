@@ -1,4 +1,3 @@
-TRANSPORTES:
 tipo;numero;nomecliente;descricao;peso;latorigem;longorigem;latdestino;longdestino;qtdpessoas_perigosa_tempmin;tempmax
 3;222;Joana Santos;Pandas;250.3;-30.027593;-51.227884;-27.597393;-48.552890;20.1;30.9
 1;111;Maria da Silva;Trabalho;140.1;-30.027190;-51.161572;-30.061458;-51.173695;2

@@ -1,0 +1,6 @@
+DRONES:
+Código: 111, Custo Fixo: 20.0, Autonomia: 1000.0, Quantidade Máx. Pessoas: 10
+
+TRANSPORTES:
+Número: 1111, Nome Cliente: ab, Descrição: ba, Peso: 10.0, Latitude de Origem: 0.0º, Latitude de Destino: 0.01º, Longitude de Origem: 0.0º, Longitude de Destino: 0.01º, Situação: ALOCADO, Distância: 1.5724580708506606 km, Quantidade de pessoas: 1
+
