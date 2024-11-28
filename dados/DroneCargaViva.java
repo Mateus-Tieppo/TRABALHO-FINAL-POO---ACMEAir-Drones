@@ -15,6 +15,9 @@ public class DroneCargaViva extends DroneCarga {
     public String toString(){
         return "Código: "+getCodigo()+", Custo Fixo: "+getCustoFixo()+", Autonomia: "+getAutonomia()+", Peso Máximo: "+getPesoMaximo()+", Climatizado: "+this.climatizado;
     }
+    public String saveString(){
+        return 2+";"+getCodigo()+";"+getCustoFixo()+";"+getAutonomia()+";"+getPesoMaximo()+";"+this.climatizado;
+    }
 
     @Override
     public double calculaCustoKM(){

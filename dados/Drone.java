@@ -25,4 +25,6 @@ public abstract class Drone {
 
     // Método abstrato que será implementado nas subclasses
     public abstract double calculaCustoKM();
+
+    public abstract String saveString();
 }

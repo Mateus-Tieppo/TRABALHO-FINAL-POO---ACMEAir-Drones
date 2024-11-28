@@ -82,4 +82,6 @@ public abstract class Transporte {
         double resultado = distance * 1.609344;
         return resultado;
     }
+
+    public abstract String saveString();
 }

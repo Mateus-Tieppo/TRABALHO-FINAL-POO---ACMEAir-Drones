@@ -32,5 +32,8 @@ public class TransporteCargaViva extends Transporte {
     public String toString(){
         return "Número: "+getNumero()+", Nome Cliente: "+getNomeCliente()+", Descrição: "+getDescricao()+", Peso: "+getPeso()+", Latitude de Origem: "+getLatitudeOrigem()+"º, Latitude de Destino: "+getLatitudeDestino()+"º, Longitude de Origem: "+getLongitudeOrigem()+"º, Longitude de Destino: "+getLongitudeDestino()+"º, Situação: "+getSituacao()+", Distância: "+getDistancia()+" km, Temperatura Mínima: "+this.temperaturaMinima+"º, Temperatura Máxima: "+this.temperaturaMaxima+"º\n";
     }
+    public String saveString() {
+        return 5 + ";" + getNumero() + ";" + getNomeCliente() + ";" + getDescricao() + ";" + getPeso() + ";" + getLatitudeOrigem() + ";" + getLatitudeDestino() + ";" + getLongitudeOrigem() + ";" + getLongitudeDestino() + ";" + this.temperaturaMinima + ";" + this.temperaturaMaxima;
+    }
 }
 

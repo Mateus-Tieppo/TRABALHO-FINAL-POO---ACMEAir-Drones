@@ -15,6 +15,9 @@ public class DronePessoal extends Drone {
     public String toString(){
         return "Código: "+getCodigo()+", Custo Fixo: "+getCustoFixo()+", Autonomia: "+getAutonomia()+", Quantidade Máx. Pessoas: "+this.qtdMaxPessoas;
     }
+    public String saveString(){
+        return 1+";"+getCodigo()+";"+getCustoFixo()+";"+getAutonomia()+";"+this.qtdMaxPessoas;
+    }
 
     @Override
     public double calculaCustoKM(){

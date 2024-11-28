@@ -1636,20 +1636,13 @@ public class ACMEAirDrones {
     public void salvarDadosAux(String caminho) {
         Path path = Paths.get(caminho + ".csv");
         try (BufferedWriter writer = Files.newBufferedWriter(path, Charset.defaultCharset())) {
-            writer.write("DRONES:");
-            writer.newLine();
-        
             for (Drone d : dronesCadastrados) {
-                writer.write(d.toString());
+                writer.write(d.saveString());
                 writer.newLine();
             }
         
-            writer.newLine();
-            writer.write("TRANSPORTES:");
-            writer.newLine();
-        
             for (Transporte t : transportes) {
-                writer.write(t.toString());
+                writer.write(t.saveString());
                 writer.newLine();
             } 
         } catch (IOException e){
@@ -1687,14 +1680,11 @@ public class ACMEAirDrones {
 
         JLabel tipoLabel = new JLabel("Tipo de Dado:");
         tipoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); 
-        String[] tipos = {"Drone Pessoal", "Drone Carga Viva", "Drone Carga Inanimada", "Transporte Pessoal", "Transporte Carga Viva", "Transporte Carga Inanimada"};
-        JComboBox<String> tipoComboBox = new JComboBox<>(tipos);
-        tipoComboBox.setFont(new Font("Arial", Font.PLAIN, 24)); 
 
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
         centralPanel.add(tipoLabel, gbc);
         gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
-        centralPanel.add(tipoComboBox, gbc);
+        
 
         JProgressBar progressBar = new JProgressBar();
         progressBar.setIndeterminate(true); 
@@ -1734,12 +1724,10 @@ public class ACMEAirDrones {
                 return;
             }
 
-            int tipo = tipoComboBox.getSelectedIndex() + 1;
-            
             progressBar.setVisible(true);
 
             try {
-                carregarDadosAux(nomeArquivo, tipo);
+                carregarDadosAux(nomeArquivo);
                 JOptionPane.showMessageDialog(carregarDadosFrame, "Dados carregados com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(carregarDadosFrame, "Erro ao processar os dados: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -1755,32 +1743,32 @@ public class ACMEAirDrones {
         carregarDadosFrame.setVisible(true);
     }
 
-    public void carregarDadosAux(String caminho, int tipo) {
+    public void carregarDadosAux(String caminho) {
         Path path = Paths.get(caminho + ".csv"); 
         try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())) {
             String line;
             while((line = reader.readLine()) != null) {
                 String[] data = line.split(";");
                 try {
-                    if (tipo == 1) {
-                        Drone aux = new DronePessoal(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Integer.parseInt(data[3]));
+                    if (Integer.parseInt(data[0]) == 1) {
+                        Drone aux = new DronePessoal(Integer.parseInt(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Integer.parseInt(data[4]));
                         dronesCadastrados.add(aux);
-                    } else if (tipo == 2) {
-                        Drone aux = new DroneCargaViva(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Boolean.parseBoolean(data[4]));
+                    } else if (Integer.parseInt(data[0]) == 2) {
+                        Drone aux = new DroneCargaViva(Integer.parseInt(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Double.parseDouble(data[4]), Boolean.parseBoolean(data[5]));
                         dronesCadastrados.add(aux);
-                    } else if (tipo == 3) {
-                        Drone aux = new DroneCargaInanimada(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Boolean.parseBoolean(data[4]));
+                    } else if (Integer.parseInt(data[0]) == 3) {
+                        Drone aux = new DroneCargaInanimada(Integer.parseInt(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), Double.parseDouble(data[4]), Boolean.parseBoolean(data[5]));
                         dronesCadastrados.add(aux);
-                    } else if (tipo == 4) {
-                        Transporte aux = new TransportePessoal(Integer.parseInt(data[0]), data[1], data[2], Double.parseDouble(data[3]), Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Integer.parseInt(data[8]));
+                    } else if (Integer.parseInt(data[0]) == 4) {
+                        Transporte aux = new TransportePessoal(Integer.parseInt(data[1]), data[2], data[3], Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Double.parseDouble(data[8]), Integer.parseInt(data[9]));
                         transportesPendentes.add(aux);
                         transportes.add(aux);
-                    } else if (tipo == 5) {
-                        Transporte aux = new TransporteCargaViva(Integer.parseInt(data[0]), data[1], data[2], Double.parseDouble(data[3]), Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Double.parseDouble(data[8]), Double.parseDouble(data[9]));
+                    } else if (Integer.parseInt(data[0]) == 5) {
+                        Transporte aux = new TransporteCargaViva(Integer.parseInt(data[1]), data[2], data[3], Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Double.parseDouble(data[8]), Double.parseDouble(data[9]), Double.parseDouble(data[10]));
                         transportesPendentes.add(aux);
                         transportes.add(aux);
-                    } else if (tipo == 6) {
-                        Transporte aux = new TransporteCargaInanimada(Integer.parseInt(data[0]), data[1], data[2], Double.parseDouble(data[3]), Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Boolean.parseBoolean(data[8]));
+                    } else if (Integer.parseInt(data[0]) == 6) {
+                        Transporte aux = new TransporteCargaInanimada(Integer.parseInt(data[1]), data[2], data[3], Double.parseDouble(data[4]), Double.parseDouble(data[5]), Double.parseDouble(data[6]), Double.parseDouble(data[7]), Double.parseDouble(data[8]), Boolean.parseBoolean(data[9]));
                         transportesPendentes.add(aux);
                         transportes.add(aux);
                     }
